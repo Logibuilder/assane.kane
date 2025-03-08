@@ -1,0 +1,132 @@
+/* Overlay mobile */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999; 
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+/* Afficher l'overlay quand le menu est ouvert */
+.overlay.show {
+    opacity: 1 !important;
+    pointer-events: all !important;
+}
+
+@media (min-width: 576px) {
+    .overlay {
+        display: none !important; /* Cache l'overlay sur les grands écrans */
+    }
+}
+/* Sidebar mobile */
+.menu {
+    position: fixed;
+    top: 0;
+    right: -250px;
+    width: 250px;
+    height: 50vh;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: right 0.3s ease-out, min-width 0.3s ease-out, min-height 0.3s ease-out, max-height 0.3s ease-out, border-radius 0.3s ease-out, padding-left 0.3s ease-out, border-left 0.3s ease-out, border-bottom 0.3s ease-out;
+}
+
+.menu.show {
+    right: 0;
+    min-width: 65vw;
+    min-height: 50vh;
+    max-height: 50vh;
+    border-radius:  0px 0px 0px 300px;
+    padding-left: 20vw;
+    border-bottom : 1px solid white;
+    border-left: 1px solid white;
+}
+
+/* Style des liens dans le menu */
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 15vh; /* Décalage vers le bas */
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    border-left:  1px solid white;
+}
+
+.menu ul li {
+    margin: 1vw 0;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: background 0.3s ease-in-out;
+}
+
+/* Effet au survol */
+.menu ul li a:hover {
+    background: rgba(255, 255, 255, 0.5);
+    font-size: 1.9rem;
+    transition: font-size 0.3s;
+}
+
+/* Bouton hamburger personnalisé */
+.menu-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: white;
+    z-index: 1001;
+}
+
+@media (min-width: 576px) {
+    /* Cache le sidebar sur desktop */
+    .menu {
+        display: none !important;
+    }
+}
+
+.nav_link:hover {
+    background-color:white;;
+    border-radius: 5px;
+}
+
+
+.nav_link {
+    transition: color 0.3s ease, transform 0.3s ease; /* Animation fluide */
+    position: relative; /* Nécessaire pour l'effet de soulignement */
+  }
+  
+  .nav_link:hover {
+    color: red !important; /* Couleur du texte au survol */
+    transform: scale(1.0); /* Légèrement agrandi */
+  }
+  
+  .nav_link:hover svg {
+    color: red !important; /* Change la couleur de l'icône */
+  }
+  
+  .nav_link::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.3s ease;
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .nav_link:hover::after {
+    width: 100%; /* Effet souligné au survol */
+  }

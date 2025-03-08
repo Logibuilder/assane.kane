@@ -1,0 +1,36 @@
+.skill_item {
+    transition: color 0.3s ease, transform 0.3s ease;
+    position: relative;
+    display: inline-block;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.skill_item:hover {
+    transform: scale(1.1);
+    background-color:white;;
+    border-radius: 5px;
+    color: black; /* Couleur du texte au survol */
+}
+
+.skill_item::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.3s ease;
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.skill_item:hover::after {
+    width: 100%;
+}
+
+.category_item {
+    box-shadow: 0 16px 16px rgba(0, 0, 0, 0.5);
+}

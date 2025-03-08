@@ -1,0 +1,37 @@
+.projectCard {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.cardHeader {
+    position: relative;
+    padding: 2rem;
+    background: #f8f9fa;
+}
+
+.folderIcon {
+    font-size: 2.5rem;
+    color: #dc3545;
+}
+
+.links {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.links a, .links button {
+    color: #6c757d;
+    transition: color 0.3s ease;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.links a:hover, .links button:hover {
+    color: #dc3545;
+}
