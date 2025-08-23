@@ -57,7 +57,7 @@ const About = () => {
 
     const handleDownloadCV = () => {
         const link = document.createElement("a");
-        link.href = "Assane_KANE_MON_CV.pdf";
+        link.href = "assane_kane_cv.pdf";
         link.download = "cv_Assane_KANE.pdf";
         link.click();
     };
@@ -103,7 +103,7 @@ const About = () => {
                                     <li className="d-flex align-items-center">
                                         <span className="badge bg-danger me-3">🔍</span>
                                         <span>
-                                            À la recherche d'un <strong>stage en développement logiciel (15 avril 2025)</strong><br/>
+                                            À la recherche d'une <strong>alternance en développement logiciel (septembre 2025)</strong><br/>
                                             Objectif : Contribuer à des projets innovants avec mes compétences techniques
                                         </span>
                                     </li>

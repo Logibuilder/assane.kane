@@ -68,7 +68,36 @@ const Projects = () => {
                         • Affichage dynamique des lignes de transport (bus, tram, métro).
                         • Sélection d’une ligne pour afficher ses arrêts correspondants.
                         • Indication visuelle de la ligne sélectionnée.`
-        }
+        },
+        {
+            id: 4,
+            title: "League Of Stones",
+            description: "Jeu de cartes stratégique combinant l'univers de League of Legends avec les mécaniques de Hearthstone.",
+            image: "/description/LOS.png",
+            linkGit: "https://github.com/Logibuilder/LeaguesOfStones",
+            pdf: "/description/league_of_stones.pdf", // Optionnel
+            tags: ["React", "Bootstrap", "REST API", "JavaScript"],
+            details: `
+                <p>League Of Stones est un jeu en ligne stratégique combinant l'univers de League of Legends avec les mécaniques de Hearthstone.<br/>
+                J'ai participé au développement de ce projet en réalisant l'ensemble de l'interface utilisateur et en intégrant les fonctionnalités du backend existant.</p>
+
+                <p><strong>Ce que j'ai développé :</strong></p>
+                <ul>
+                    <li>Interface responsive en React.js</li>
+                    <li>Gestion du combat tour par tour (affichage dynamique des decks, pioche, pose, attaque)</li>
+                    <li>Intégration du matchmaking et des profils utilisateurs via une API REST</li>
+                    <li>Synchronisation des états de jeu et affichage en temps réel des actions des joueurs</li>
+                </ul>
+
+                <p><strong>Technologies principales :</strong></p>
+                <ul>
+                    <li>Frontend : React.js, CSS Modules, Bootstrap</li>
+                    <li>Backend : Node.js/Express (API existante), MongoDB</li>
+                </ul>
+
+                <p>Grâce à ce projet, j'ai renforcé mes compétences en développement frontend moderne, en communication avec des API REST, en programmation asynchrone par les appels des web services et en création d'interfaces interactives et fluides pour des jeux compétitifs.</p>
+                `
+        },
     ];
 
     // Vérifie si le composant est côté client
@@ -147,11 +176,11 @@ const Projects = () => {
                                 className="img-fluid mb-4"
                                 style={{ height: "300px", objectFit: "cover", width: "100%" }}
                             />
-                            <p>{selectedProject.details}</p>
+                            <p dangerouslySetInnerHTML={{ __html: selectedProject.details }} />
                             <div className="d-flex gap-2">
                                 <Button 
                                     variant="danger" 
-                                    href={selectedProject.link} 
+                                    href={selectedProject.linkGit} 
                                     target="_blank"
                                 >
                                     <FiGithub /> Code Source
