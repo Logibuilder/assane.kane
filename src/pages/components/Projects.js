@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Modal, Badge } from "react-bootstrap";
 import { FiGithub, FiExternalLink, FiFolder } from "react-icons/fi";
 import styles from '../../styles/Project.module.css';
+import { getAssetPath } from '../../utils/assetPath';
 
 const Projects = () => {
     const [showModal, setShowModal] = useState(false);
@@ -10,95 +11,95 @@ const Projects = () => {
 
     // Données des projets
     const projects = [
-        {
-            id: 1,
-            title: "Gestion des emplois du temps",
-            description: "Application permettant de gérer les emplois du temps des professeurs en prenant en compte leurs disponibilités et les ressources disponibles.",
-            image: "/images/imagesEDT/pageConnec.png", // Ajoute une image représentative
-            linkGit: "https://github.com/Logibuilder/gestionEmploiDuTemps", // Lien vers ton dépôt GitHub
-            pdf: "/description/gestionEDT.pdf", // Lien vers une doc PDF si disponible
-            tags: ["JAVA","Spring Boot","PostgreSQL",  "FullCalendar", "Thymeleaf", "JavaScript", "Bootstrap"],
-            details: `Cette application web facilite la gestion des emplois du temps des enseignants en prenant en compte les disponibilités des professeurs, les salles et les types de séances (CM, TD, TP).
+    {
+        id: 1,
+        title: "Gestion des emplois du temps",
+        description: "Application permettant de gérer les emplois du temps des professeurs en prenant en compte leurs disponibilités et les ressources disponibles.",
+        image: getAssetPath("/images/imagesEDT/pageConnec.png"),
+        linkGit: "https://github.com/Logibuilder/gestionEmploiDuTemps",
+        pdf: getAssetPath("/description/gestionEDT.pdf"),
+        tags: ["JAVA","Spring Boot","PostgreSQL",  "FullCalendar", "Thymeleaf", "JavaScript", "Bootstrap"],
+        details: `Cette application web facilite la gestion des emplois du temps des enseignants en prenant en compte les disponibilités des professeurs, les salles et les types de séances (CM, TD, TP).
 
-            Fonctionnalités principales : 
-            Gestion des enseignants, matières et salles de cours.
-            Consultation et modification des emplois du temps.
-            Prise en compte des contraintes de disponibilités des enseignants.
-            Interface utilisateur intuitive avec FullCalendar.
-            
-            L’objectif est d’aider à organiser les plannings tout en évitant les conflits liés aux disponibilités et aux ressources.`
-        },
-        {
-            id: 2,
-            title: "Portfolio",
-            description: "Mon portfolio personnel où je présente mes projets, mes compétences et où les utilisateurs peuvent me contacter via un formulaire de contact utilisant Formspree.",
-            image: "/images/portfolio_.png", // Ajoute une image de ton portfolio
-            linkGit: "https://github.com/Logibuilder/assane.kane", // Lien vers ton dépôt GitHub
-            pdf: "/description/portfolio.pdf", // Lien vers une doc PDF si disponible
-            tags: ["React", "Formspree", "Bootstrap", "JavaScript", "HTML", "CSS"],
-            details: `🚀 Portfolio Développeur – Assane KANE est une application web 
-            dynamique développée avec React, permettant de présenter mon parcours, mes 
-            compétences et mes projets en développement logiciel. Il intègre plusieurs 
-            technologies telles que React pour une interface interactive, JavaScript & 
-            CSS pour la gestion du comportement et du design, ainsi que Bootstrap 5 pour 
-            assurer un rendu moderne et responsive. Ses principales fonctionnalités 
-            incluent une présentation personnelle détaillant mon parcours et mes objectifs, 
-            un affichage de mes projets avec descriptions et liens vers GitHub, une liste 
-            de mes compétences en programmation et en frameworks, ainsi qu’une section 
-            contact & réseaux avec un formulaire et des liens vers mes profils professionnels. 
-            L'interface est conçue avec une palette de couleurs blanche et rouge, offrant un 
-            design épuré et professionnel. Ce projet est en constante évolution pour intégrer 
-            de nouvelles fonctionnalités et améliorer l'expérience utilisateur. 🚀`
-        },
-        {
-            id: 3,
-            title: "Réseau tisseo",
-            description: "L'application est une plateforme interactive permettant d'explorer le réseau de transport en commun de Toulouse en récupérant et affichant en temps réel les données des lignes et arrêts via l'API Tisséo.",
-            image: "/images/logo_tisseo.jpeg", // Chemin relatif depuis le dossier public
-            linkGit: "https://github.com/votre-projet-3",
-            pdf: "/description/app_tisseo.pdf", // Chemin relatif depuis le dossier public
-            tags: ["React", "Mapbox", "UI/UX"],
-            details: `Application Tisséo 🚍
-                    Cette application web interactive permet d’explorer le réseau de transport en commun de Toulouse en récupérant les données en temps réel via l’API Tisséo.
-                    Technologies utilisées :
-                        • Svelte ⚡ : Framework JavaScript moderne pour une interface réactive et performante.
-                        • Fetch API 🌍 : Communication avec l’API Tisséo pour récupérer les lignes et arrêts en temps réel.
-                        • Bootstrap 🎨 : Amélioration de l’interface utilisateur avec des composants et une mise en page responsive.
-                    Fonctionnalités principales :
-                        • Affichage dynamique des lignes de transport (bus, tram, métro).
-                        • Sélection d’une ligne pour afficher ses arrêts correspondants.
-                        • Indication visuelle de la ligne sélectionnée.`
-        },
-        {
-            id: 4,
-            title: "League Of Stones",
-            description: "Jeu de cartes stratégique combinant l'univers de League of Legends avec les mécaniques de Hearthstone.",
-            image: "/images/leagueofstone.png",
-            linkGit: "https://github.com/Logibuilder/LeaguesOfStones",
-            pdf: "/description/los-demo.pdf", // Optionnel
-            tags: ["React", "Bootstrap", "REST API", "JavaScript"],
-            details: `
-                <p>League Of Stones est un jeu en ligne stratégique combinant l'univers de League of Legends avec les mécaniques de Hearthstone.<br/>
-                J'ai participé au développement de ce projet en réalisant l'ensemble de l'interface utilisateur et en intégrant les fonctionnalités du backend existant.</p>
+        Fonctionnalités principales : 
+        Gestion des enseignants, matières et salles de cours.
+        Consultation et modification des emplois du temps.
+        Prise en compte des contraintes de disponibilités des enseignants.
+        Interface utilisateur intuitive avec FullCalendar.
+        
+        L'objectif est d'aider à organiser les plannings tout en évitant les conflits liés aux disponibilités et aux ressources.`
+    },
+    {
+        id: 2,
+        title: "Portfolio",
+        description: "Mon portfolio personnel où je présente mes projets, mes compétences et où les utilisateurs peuvent me contacter via un formulaire de contact utilisant Formspree.",
+        image: getAssetPath("/images/portfolio_.png"),
+        linkGit: "https://github.com/Logibuilder/assane.kane",
+        pdf: getAssetPath("/description/portfolio.pdf"),
+        tags: ["React", "Formspree", "Bootstrap", "JavaScript", "HTML", "CSS"],
+        details: `🚀 Portfolio Développeur – Assane KANE est une application web 
+        dynamique développée avec React, permettant de présenter mon parcours, mes 
+        compétences et mes projets en développement logiciel. Il intègre plusieurs 
+        technologies telles que React pour une interface interactive, JavaScript & 
+        CSS pour la gestion du comportement et du design, ainsi que Bootstrap 5 pour 
+        assurer un rendu moderne et responsive. Ses principales fonctionnalités 
+        incluent une présentation personnelle détaillant mon parcours et mes objectifs, 
+        un affichage de mes projets avec descriptions et liens vers GitHub, une liste 
+        de mes compétences en programmation et en frameworks, ainsi qu'une section 
+        contact & réseaux avec un formulaire et des liens vers mes profils professionnels. 
+        L'interface est conçue avec une palette de couleurs blanche et rouge, offrant un 
+        design épuré et professionnel. Ce projet est en constante évolution pour intégrer 
+        de nouvelles fonctionnalités et améliorer l'expérience utilisateur. 🚀`
+    },
+    {
+        id: 3,
+        title: "Réseau tisseo",
+        description: "L'application est une plateforme interactive permettant d'explorer le réseau de transport en commun de Toulouse en récupérant et affichant en temps réel les données des lignes et arrêts via l'API Tisséo.",
+        image: getAssetPath("/images/logo_tisseo.jpeg"),
+        linkGit: "https://github.com/votre-projet-3",
+        pdf: getAssetPath("/description/app_tisseo.pdf"),
+        tags: ["React", "Mapbox", "UI/UX"],
+        details: `Application Tisséo 🚍
+                Cette application web interactive permet d'explorer le réseau de transport en commun de Toulouse en récupérant les données en temps réel via l'API Tisséo.
+                Technologies utilisées :
+                    • Svelte ⚡ : Framework JavaScript moderne pour une interface réactive et performante.
+                    • Fetch API 🌍 : Communication avec l'API Tisséo pour récupérer les lignes et arrêts en temps réel.
+                    • Bootstrap 🎨 : Amélioration de l'interface utilisateur avec des composants et une mise en page responsive.
+                Fonctionnalités principales :
+                    • Affichage dynamique des lignes de transport (bus, tram, métro).
+                    • Sélection d'une ligne pour afficher ses arrêts correspondants.
+                    • Indication visuelle de la ligne sélectionnée.`
+    },
+    {
+        id: 4,
+        title: "League Of Stones",
+        description: "Jeu de cartes stratégique combinant l'univers de League of Legends avec les mécaniques de Hearthstone.",
+        image: getAssetPath("/images/leagueofstone.png"),
+        linkGit: "https://github.com/Logibuilder/LeaguesOfStones",
+        pdf: getAssetPath("/description/los-demo.pdf"),
+        tags: ["React", "Bootstrap", "REST API", "JavaScript"],
+        details: `
+            <p>League Of Stones est un jeu en ligne stratégique combinant l'univers de League of Legends avec les mécaniques de Hearthstone.<br/>
+            J'ai participé au développement de ce projet en réalisant l'ensemble de l'interface utilisateur et en intégrant les fonctionnalités du backend existant.</p>
 
-                <p><strong>Ce que j'ai développé :</strong></p>
-                <ul>
-                    <li>Interface responsive en React.js</li>
-                    <li>Gestion du combat tour par tour (affichage dynamique des decks, pioche, pose, attaque)</li>
-                    <li>Intégration du matchmaking et des profils utilisateurs via une API REST</li>
-                    <li>Synchronisation des états de jeu et affichage en temps réel des actions des joueurs</li>
-                </ul>
+            <p><strong>Ce que j'ai développé :</strong></p>
+            <ul>
+                <li>Interface responsive en React.js</li>
+                <li>Gestion du combat tour par tour (affichage dynamique des decks, pioche, pose, attaque)</li>
+                <li>Intégration du matchmaking et des profils utilisateurs via une API REST</li>
+                <li>Synchronisation des états de jeu et affichage en temps réel des actions des joueurs</li>
+            </ul>
 
-                <p><strong>Technologies principales :</strong></p>
-                <ul>
-                    <li>Frontend : React.js, CSS Modules, Bootstrap</li>
-                    <li>Backend : Node.js/Express (API existante), MongoDB</li>
-                </ul>
+            <p><strong>Technologies principales :</strong></p>
+            <ul>
+                <li>Frontend : React.js, CSS Modules, Bootstrap</li>
+                <li>Backend : Node.js/Express (API existante), MongoDB</li>
+            </ul>
 
-                <p>Grâce à ce projet, j'ai renforcé mes compétences en développement frontend moderne, en communication avec des API REST, en programmation asynchrone par les appels des web services et en création d'interfaces interactives et fluides pour des jeux compétitifs.</p>
-                `
-        },
-    ];
+            <p>Grâce à ce projet, j'ai renforcé mes compétences en développement frontend moderne, en communication avec des API REST, en programmation asynchrone par les appels des web services et en création d'interfaces interactives et fluides pour des jeux compétitifs.</p>
+            `
+    },
+];
 
     // Vérifie si le composant est côté client
     useEffect(() => {
