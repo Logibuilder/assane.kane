@@ -57,7 +57,7 @@ const About = () => {
 
     const handleDownloadCV = () => {
         const link = document.createElement("a");
-        link.href = "assane_kane_cv.pdf";
+        link.href = "23_08_25_ak_cv.pdf";
         link.download = "cv_Assane_KANE.pdf";
         link.click();
     };

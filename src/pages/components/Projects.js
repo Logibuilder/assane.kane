@@ -14,7 +14,7 @@ const Projects = () => {
             id: 1,
             title: "Gestion des emplois du temps",
             description: "Application permettant de gérer les emplois du temps des professeurs en prenant en compte leurs disponibilités et les ressources disponibles.",
-            image: "/images/imagesEDT/page_connec.png", // Ajoute une image représentative
+            image: "/images/imagesEDT/pageConnec.png", // Ajoute une image représentative
             linkGit: "https://github.com/Logibuilder/gestionEmploiDuTemps", // Lien vers ton dépôt GitHub
             pdf: "/description/gestionEDT.pdf", // Lien vers une doc PDF si disponible
             tags: ["JAVA","Spring Boot","PostgreSQL",  "FullCalendar", "Thymeleaf", "JavaScript", "Bootstrap"],
@@ -32,7 +32,7 @@ const Projects = () => {
             id: 2,
             title: "Portfolio",
             description: "Mon portfolio personnel où je présente mes projets, mes compétences et où les utilisateurs peuvent me contacter via un formulaire de contact utilisant Formspree.",
-            image: "/images/portfolio.png", // Ajoute une image de ton portfolio
+            image: "/images/portfolio_.png", // Ajoute une image de ton portfolio
             linkGit: "https://github.com/Logibuilder/assane.kane", // Lien vers ton dépôt GitHub
             pdf: "/description/portfolio.pdf", // Lien vers une doc PDF si disponible
             tags: ["React", "Formspree", "Bootstrap", "JavaScript", "HTML", "CSS"],
@@ -73,9 +73,9 @@ const Projects = () => {
             id: 4,
             title: "League Of Stones",
             description: "Jeu de cartes stratégique combinant l'univers de League of Legends avec les mécaniques de Hearthstone.",
-            image: "/description/LOS.png",
+            image: "/images/leagueofstone.png",
             linkGit: "https://github.com/Logibuilder/LeaguesOfStones",
-            pdf: "/description/league_of_stones.pdf", // Optionnel
+            pdf: "/description/los-demo.pdf", // Optionnel
             tags: ["React", "Bootstrap", "REST API", "JavaScript"],
             details: `
                 <p>League Of Stones est un jeu en ligne stratégique combinant l'univers de League of Legends avec les mécaniques de Hearthstone.<br/>
