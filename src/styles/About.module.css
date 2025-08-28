@@ -5,23 +5,23 @@
     object-fit: cover;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 50%;
-    border : 3px solid #dc3545;
-    max-width: 200px; /* Taille maximale par défaut */
-    max-height: 200px; /* Taille maximale par défaut */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre douce */
+    border: 3px solid var(--primary-color);
+    max-width: 200px;
+    max-height: 200px;
+    box-shadow: 0 4px 8px var(--shadow);
 }
 
 /* Effet de survol */
 .stretchImage:hover {
     transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Ombre plus prononcée au survol */
+    box-shadow: 0 8px 16px var(--shadow);
 }
 
 /* Media query pour les grands écrans */
 @media (min-width: 768px) {
     .stretchImage {
-        border-radius: 15%; /* Supprime le cercle sur les grands écrans */
-        max-width: 300px; /* Nouvelle taille maximale pour les grands écrans */
-        max-height: 300px; /* Nouvelle taille maximale pour les grands écrans */
+        border-radius: 15%;
+        max-width: 300px;
+        max-height: 300px;
     }
 }

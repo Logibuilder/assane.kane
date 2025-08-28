@@ -1,58 +1,59 @@
 .footer {
     padding: 10px;
-    background-color: red;
-    color: white;
-  }
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-top: 2px solid var(--primary-color);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
   
-  .social_icons {
+.social_icons {
     display: flex;
     justify-content: center;
     gap: 35px;
     padding: 20px;
-  }
+}
   
-  .footer p {
+.footer p {
     text-align: center;
-  }
+    color: var(--text-color);
+}
 
-  
-  .social_icons a {
+.social_icons a {
     font-size: 24px;
     color: white;
     transition: color 0.3s ease;
-  }
-  
+}
  
 .social_icons a:nth-child(1):hover {
-    color:black; /* Couleur pour GitHub */
+    color: #333; /* Couleur pour GitHub */
 }
 
 .social_icons a:nth-child(2):hover {
-    color:blue; /* Couleur pour LinkedIn */
+    color: #0077b5; /* Couleur pour LinkedIn */
 }
 
 .nav-link {
-  transition: color 0.3s ease, transform 0.3s ease; /* Animation fluide */
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #ffffff; /* Blanc au survol */
-  transform: scale(1.1); /* Légèrement agrandi */
+    color: #ffffff;
+    transform: scale(1.1);
 }
 
 .nav-link:hover svg {
-  color: yellow; /* Change la couleur de l'icône au survol */
+    color: #ffc107; /* Couleur jaune pour les icônes au survol */
 }
 
 .nav-link::after {
-  content: "";
-  display: block;
-  width: 0;
-  height: 2px;
-  background: white;
-  transition: width 0.3s ease;
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.3s ease;
 }
 
 .nav-link:hover::after {
-  width: 100%; /* Barre qui s'étend sous le texte */
+    width: 100%;
 }

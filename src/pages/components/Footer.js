@@ -6,7 +6,7 @@ import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
 const Footer = () => {
     return (
-        <footer id="footer" className={`${styles.footer} bg-danger` }>
+        <footer id="footer" className={`${styles.footer} ` }>
             <div className={`${styles.social_icons}`}>
                 
                 <a href="https://github.com/Logibuilder" target="_blank" rel="noopener noreferrer">

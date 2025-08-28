@@ -1,17 +1,19 @@
 .skill_item {
-    transition: color 0.3s ease, transform 0.3s ease;
+    transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
     position: relative;
     display: inline-block;
     padding: 10px;
     text-align: center;
     cursor: pointer;
+    color: var(--text-color);
 }
 
 .skill_item:hover {
     transform: scale(1.1);
-    background-color:white;;
+    background-color: var(--card-bg);
     border-radius: 5px;
-    color: black; /* Couleur du texte au survol */
+    /* color: var(--primary-color); */
+    box-shadow: 0 4px 8px var(--shadow);
 }
 
 .skill_item::after {
@@ -19,7 +21,7 @@
     display: block;
     width: 0;
     height: 2px;
-    background: white;
+    background: var(--text-color);
     transition: width 0.3s ease;
     position: absolute;
     bottom: -2px;
@@ -29,8 +31,12 @@
 
 .skill_item:hover::after {
     width: 100%;
+    /* background: var(--primary-color); */
 }
 
 .category_item {
-    box-shadow: 0 16px 16px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 16px 16px var(--shadow);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }

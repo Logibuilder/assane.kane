@@ -1,10 +1,14 @@
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
-import { useEffect } from 'react';
+// src/pages/_app.js
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/global.css';
-export default function App({ Component, pageProps }) {
-  useEffect(() => {
-    // Charger Bootstrap JS seulement côté client
-    import('bootstrap/dist/js/bootstrap.bundle.min');
-    }, []);
-  return <Component {...pageProps} />;
+import { ThemeProvider } from '../contexts/ThemeContext';
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <ThemeProvider>
+      <Component {...pageProps} />
+    </ThemeProvider>
+  );
 }
+
+export default MyApp;

@@ -20,9 +20,10 @@
 
 @media (min-width: 576px) {
     .overlay {
-        display: none !important; /* Cache l'overlay sur les grands écrans */
+        display: none !important;
     }
 }
+
 /* Sidebar mobile */
 .menu {
     position: fixed;
@@ -40,21 +41,21 @@
     min-width: 65vw;
     min-height: 50vh;
     max-height: 50vh;
-    border-radius:  0px 0px 0px 300px;
+    border-radius: 0px 0px 0px 300px;
     padding-left: 20vw;
-    border-bottom : 1px solid white;
-    border-left: 1px solid white;
+    border-bottom: 1px solid var(--text-color);
+    border-left: 1px solid var(--text-color);
 }
 
 /* Style des liens dans le menu */
 .menu ul {
     list-style: none;
     padding: 0;
-    margin-top: 15vh; /* Décalage vers le bas */
+    margin-top: 15vh;
     display: flex;
     flex-direction: column;
     align-items: left;
-    border-left:  1px solid white;
+    border-left: 1px solid var(--text-color);
 }
 
 .menu ul li {
@@ -65,17 +66,16 @@
     text-decoration: none;
     font-size: 1.4rem;
     font-weight: bold;
-    color: white;
+    color: var(--text-color);
     padding: 10px 20px;
     border-radius: 10px;
-    transition: background 0.3s ease-in-out;
+    transition: background 0.3s ease-in-out, font-size 0.3s ease, color 0.3s ease;
 }
 
 /* Effet au survol */
 .menu ul li a:hover {
-    background: rgba(255, 255, 255, 0.5);
+    background: color-mix(in srgb, var(--text-color) 30%, transparent);
     font-size: 1.9rem;
-    transition: font-size 0.3s;
 }
 
 /* Bouton hamburger personnalisé */
@@ -85,48 +85,47 @@
     font-size: 1.5rem;
     color: white;
     z-index: 1001;
+    transition: color 0.3s ease;
 }
 
 @media (min-width: 576px) {
-    /* Cache le sidebar sur desktop */
     .menu {
         display: none !important;
     }
 }
 
 .nav_link:hover {
-    background-color:white;;
+    background-color: var(--card-bg);
     border-radius: 5px;
 }
 
-
 .nav_link {
-    transition: color 0.3s ease, transform 0.3s ease; /* Animation fluide */
-    position: relative; /* Nécessaire pour l'effet de soulignement */
-  }
+    transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+    position: relative;
+}
   
-  .nav_link:hover {
-    color: red !important; /* Couleur du texte au survol */
-    transform: scale(1.0); /* Légèrement agrandi */
-  }
+.nav_link:hover {
+    color: var(--primary-color) !important;
+    transform: scale(1.0);
+}
   
-  .nav_link:hover svg {
-    color: red !important; /* Change la couleur de l'icône */
-  }
+.nav_link:hover svg {
+    color: var(--primary-color) !important;
+}
   
-  .nav_link::after {
+.nav_link::after {
     content: "";
     display: block;
     width: 0;
     height: 2px;
-    background: white;
+    background: var(--text-color);
     transition: width 0.3s ease;
     position: absolute;
     bottom: -2px;
     left: 50%;
     transform: translateX(-50%);
-  }
+}
   
-  .nav_link:hover::after {
-    width: 100%; /* Effet souligné au survol */
-  }
+.nav_link:hover::after {
+    width: 100%;
+}

@@ -1,19 +1,29 @@
 .projectCard {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
     border-radius: 15px;
     overflow: hidden;
-    background: #fff;
+    background: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px var(--shadow);
+}
+
+.projectCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--shadow);
 }
 
 .cardHeader {
     position: relative;
     padding: 2rem;
-    background: #f8f9fa;
+    background: color-mix(in srgb, var(--card-bg) 95%, var(--border-color) 5%);
+    transition: background-color 0.3s ease;
 }
 
 .folderIcon {
     font-size: 2.5rem;
-    color: #dc3545;
+    color: var(--primary-color);
+    transition: color 0.3s ease;
 }
 
 .links {
@@ -25,7 +35,7 @@
 }
 
 .links a, .links button {
-    color: #6c757d;
+    color: color-mix(in srgb, var(--text-color) 70%, transparent);
     transition: color 0.3s ease;
     background: none;
     border: none;
@@ -33,5 +43,5 @@
 }
 
 .links a:hover, .links button:hover {
-    color: #dc3545;
+    color: var(--primary-color);
 }
