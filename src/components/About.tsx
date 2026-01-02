@@ -1,20 +1,16 @@
-"use client"; // Indispensable pour les hooks (useState, useEffect)
+"use client";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+/* eslint-disable @next/next/no-img-element */ // On désactive le warning Image pour ce fichier
 import styles from '../styles/About.module.css';
 import { useEffect, useRef, useState } from "react";
 import { FiDownload } from "react-icons/fi";
-// 1. On importe l'interface définie dans types/index.ts
-import { AnimationRef} from "@/types";
-
-
+import { AnimationRef } from "@/types";
 
 const About = () => {
-    // TypeScript infère automatiquement que c'est un string, mais on peut être explicite
     const [displayName, setDisplayName] = useState<string>("");
     const fullName = "Assane KANE";
     
-    // 2. On type le useRef avec l'interface créée au-dessus
     const animationState = useRef<AnimationRef>({
         currentIndex: 0,
         isTyping: true,
@@ -22,22 +18,24 @@ const About = () => {
     });
 
     useEffect(() => {
+        // Copie de la ref pour le cleanup (corrige le warning exhaustive-deps)
+        const animRef = animationState.current;
         const nameArray = fullName.split("");
         
         const animate = () => {
-            if (!animationState.current.isMounted) return;
+            if (!animRef.isMounted) return;
 
-            const { currentIndex, isTyping } = animationState.current;
+            const { currentIndex, isTyping } = animRef;
             
             // Phase d'écriture
             if (isTyping) {
                 if (currentIndex < nameArray.length) {
                     setDisplayName(prev => prev + nameArray[currentIndex]);
-                    animationState.current.currentIndex++;
+                    animRef.currentIndex++;
                     setTimeout(animate, 100);
                 } else {
                     // Pause après écriture complète
-                    animationState.current.isTyping = false;
+                    animRef.isTyping = false;
                     setTimeout(animate, 1000);
                 }
             } 
@@ -45,11 +43,11 @@ const About = () => {
             else {
                 if (currentIndex > 0) {
                     setDisplayName(prev => prev.slice(0, -1));
-                    animationState.current.currentIndex--;
+                    animRef.currentIndex--;
                     setTimeout(animate, 100);
                 } else {
                     // Pause après effacement complet
-                    animationState.current.isTyping = true;
+                    animRef.isTyping = true;
                     setTimeout(animate, 1000);
                 }
             }
@@ -58,14 +56,14 @@ const About = () => {
         animate();
 
         return () => {
-            animationState.current.isMounted = false;
+            animRef.isMounted = false;
             setDisplayName("");
         };
     }, []);
 
     const handleDownloadCV = () => {
         const link = document.createElement("a");
-        link.href = "23_08_25_ak_cv.pdf"; // Vérifiez que ce fichier est bien dans le dossier public
+        link.href = "23_08_25_ak_cv.pdf";
         link.download = "cv_Assane_KANE.pdf";
         link.click();
     };
@@ -82,7 +80,6 @@ const About = () => {
                             src="avatar_cv.jpg" 
                             alt="Assane KANE" 
                             className={`img-fluid shadow-lg ${styles.stretchImage}`}
-                            // 3. Typage de l'événement souris sur une IMAGE (HTMLImageElement)
                             onMouseEnter={(e: React.MouseEvent<HTMLImageElement>) => {
                                 e.currentTarget.style.transform = "scale(1.05)";
                             }}
@@ -105,7 +102,8 @@ const About = () => {
                                 <ul className="list-unstyled">
                                     <li className="d-flex align-items-center mb-3">
                                         <span className="badge bg-danger me-3">📚</span>
-                                        Étudiant en L3 MIASHS à l'Université Toulouse 2 Jean Jaurès
+                                        {/* CORRECTION ICI : l'Université -> l&apos;Université */}
+                                        Étudiant en L3 MIASHS à l&apos;Université Toulouse 2 Jean Jaurès
                                     </li>
                                     
                                     <li className="d-flex align-items-center mb-3">
@@ -116,7 +114,8 @@ const About = () => {
                                     <li className="d-flex align-items-center">
                                         <span className="badge bg-danger me-3">🔍</span>
                                         <span>
-                                            À la recherche d'une <strong>alternance en développement logiciel (septembre 2025)</strong><br/>
+                                            {/* CORRECTION ICI : d'une -> d&apos;une */}
+                                            À la recherche d&apos;une <strong>alternance en développement logiciel (septembre 2025)</strong><br/>
                                             Objectif : Contribuer à des projets innovants avec mes compétences techniques
                                         </span>
                                     </li>
@@ -133,7 +132,6 @@ const About = () => {
                                     transition: "all 0.3s ease",
                                     transformOrigin: "center"
                                 }}
-                                // 4. Typage de l'événement souris sur un BOUTON (HTMLButtonElement)
                                 onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
                                     e.currentTarget.style.transform = "scale(1.05)";
                                 }}
