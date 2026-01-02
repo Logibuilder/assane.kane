@@ -1,5 +1,6 @@
 // src/types/index.ts
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import React from "react"; //
 
 // Type pour un élément du menu (utilisé dans Menu.tsx)
 export interface MenuItem {
@@ -37,13 +38,13 @@ export interface AnimationRef {
 
 
 // On définit les types pour nos données
-interface Skill {
+export interface Skill {
   name: string;
   icon: React.ReactNode;
   color: string;
 }
 
-interface SkillCategory {
+export interface SkillCategory {
   title: string;
   skills: Skill[];
 }
@@ -57,7 +58,7 @@ export interface ProjectCardProps {
 }
 
 
-interface ProjectModalProps {
+export interface ProjectModalProps {
     show: boolean;
     onHide: () => void;
     project: Project | null;
@@ -66,7 +67,7 @@ interface ProjectModalProps {
 
 //themeContext
 // Définition des types
-interface ThemeContextType {
+export interface ThemeContextType {
   isDarkMode: boolean;
   toggleTheme: () => void;
   theme: 'dark' | 'light';
