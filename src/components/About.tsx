@@ -1,13 +1,21 @@
+"use client"; // Indispensable pour les hooks (useState, useEffect)
+
 import "bootstrap/dist/css/bootstrap.min.css";
-import styles from '../../styles/About.module.css'; // Importez le CSS Module
+import styles from '../styles/About.module.css';
 import { useEffect, useRef, useState } from "react";
 import { FiDownload } from "react-icons/fi";
+// 1. On importe l'interface définie dans types/index.ts
+import { AnimationRef} from "@/types";
+
+
 
 const About = () => {
-    const [displayName, setDisplayName] = useState("");
+    // TypeScript infère automatiquement que c'est un string, mais on peut être explicite
+    const [displayName, setDisplayName] = useState<string>("");
     const fullName = "Assane KANE";
     
-    const animationState = useRef({
+    // 2. On type le useRef avec l'interface créée au-dessus
+    const animationState = useRef<AnimationRef>({
         currentIndex: 0,
         isTyping: true,
         isMounted: true
@@ -57,7 +65,7 @@ const About = () => {
 
     const handleDownloadCV = () => {
         const link = document.createElement("a");
-        link.href = "23_08_25_ak_cv.pdf";
+        link.href = "23_08_25_ak_cv.pdf"; // Vérifiez que ce fichier est bien dans le dossier public
         link.download = "cv_Assane_KANE.pdf";
         link.click();
     };
@@ -73,9 +81,14 @@ const About = () => {
                         <img 
                             src="avatar_cv.jpg" 
                             alt="Assane KANE" 
-                            className={`img-fluid shadow-lg ${styles.stretchImage}`} // Appliquez la classe CSS Module
-                            onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+                            className={`img-fluid shadow-lg ${styles.stretchImage}`}
+                            // 3. Typage de l'événement souris sur une IMAGE (HTMLImageElement)
+                            onMouseEnter={(e: React.MouseEvent<HTMLImageElement>) => {
+                                e.currentTarget.style.transform = "scale(1.05)";
+                            }}
+                            onMouseLeave={(e: React.MouseEvent<HTMLImageElement>) => {
+                                e.currentTarget.style.transform = "scale(1)";
+                            }}
                         />
                     </div>
                 </div>
@@ -120,8 +133,13 @@ const About = () => {
                                     transition: "all 0.3s ease",
                                     transformOrigin: "center"
                                 }}
-                                onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-                                onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+                                // 4. Typage de l'événement souris sur un BOUTON (HTMLButtonElement)
+                                onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                    e.currentTarget.style.transform = "scale(1.05)";
+                                }}
+                                onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                    e.currentTarget.style.transform = "scale(1)";
+                                }}
                             >
                                 <FiDownload className="me-2" size={20}/>
                                 Télécharger mon CV

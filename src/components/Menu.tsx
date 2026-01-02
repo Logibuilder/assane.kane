@@ -1,5 +1,7 @@
+"use client";
+
 import { useState } from "react";
-import styles from "../../styles/Menu.module.css";
+import styles from "../styles/Menu.module.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faCode, faProjectDiagram, faEnvelope } from "@fortawesome/free-solid-svg-icons";
