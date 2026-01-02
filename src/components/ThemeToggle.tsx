@@ -1,8 +1,8 @@
 // src/pages/components/ThemeToggle.js
 import { useState, useEffect } from 'react';
 import { FiSun, FiMoon } from 'react-icons/fi';
-import { useTheme } from '../../contexts/ThemeContext';
-import styles from '../../styles/ThemeToggle.module.css';
+import { useTheme } from '../contexts/ThemeContext';
+import styles from '../styles/ThemeToggle.module.css';
 
 const ThemeToggle = () => {
   const { isDarkMode, toggleTheme } = useTheme();

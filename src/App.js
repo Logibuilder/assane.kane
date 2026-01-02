@@ -1,9 +1,9 @@
-import Menu from "./pages/components/Menu";
-import About from "./pages/components/About";
-import Projects from "./pages/components/Projects";
-import Contact from "./pages/components/Contact";
-import Footer from "./pages/components/Footer";
-import Skills from "./pages/components/Skills";
+import Menu from "./pages_old/components/Menu";
+import About from "./pages_old/components/About";
+import Projects from "./pages_old/components/Projects";
+import Contact from "./pages_old/components/Contact";
+import Footer from "./pages_old/components/Footer";
+import Skills from "./pages_old/components/Skills";
 function App() {
     return( 
     <>

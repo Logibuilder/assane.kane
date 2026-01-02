@@ -1,17 +1,106 @@
-/* Bordure rouge au focus */
-.form_control:focus {
-    border-color: var(--primary-color) !important;
-    box-shadow: 0 0 5px color-mix(in srgb, var(--primary-color) 50%, transparent) !important;
+/* Container principal centré */
+.contactSection {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 1rem;
+  background-color: #fcfcfc;
 }
 
-/* Support pour les champs en mode sombre */
-.form_control {
-    background-color: var(--card-bg) !important;
-    color: var(--text-color) !important;
-    border-color: var(--border-color) !important;
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+/* Carte du formulaire (Style épuré) */
+.contactCard {
+  background: white;
+  width: 100%;
+  max-width: 600px;
+  padding: 3rem;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
 }
 
-.form_control::placeholder {
-    color: color-mix(in srgb, var(--text-color) 60%, transparent) !important;
+/* Titre */
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Groupes de champs */
+.inputGroup {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+}
+
+/* Champs de saisie Custom */
+.input, .textarea {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  background-color: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  outline: none;
+  font-family: inherit;
+  color: #1f2937;
+}
+
+/* État Focus géré par CSS, mais boosté par Motion */
+.input:focus, .textarea:focus {
+  background-color: white;
+  border-color: #dc3545; /* Rouge primaire */
+  box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.1);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Bouton Envoyer Moderne */
+.submitButton {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  background-color: #dc3545;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 10px 20px -5px rgba(220, 53, 69, 0.4);
+}
+
+/* Message de succès */
+.successMessage {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid #a7f3d0;
 }
