@@ -29,7 +29,7 @@ export interface ContactFormInputs {
 }
 
 // 1. On définit l'interface pour l'objet d'état de l'animation
-interface AnimationRef {
+export interface AnimationRef {
     currentIndex: number;
     isTyping: boolean;
     isMounted: boolean;
