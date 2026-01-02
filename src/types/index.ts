@@ -50,7 +50,7 @@ interface SkillCategory {
 
 
 //projects
-interface ProjectCardProps {
+export interface ProjectCardProps {
     project: Project;
     index: number;
     onOpenModal: (project: Project) => void;
