@@ -1,74 +1,54 @@
-// src/types/index.ts
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import React from "react"; //
-
-// Type pour un élément du menu (utilisé dans Menu.tsx)
-export interface MenuItem {
-    name: string;
-    path: string;
-    icon: IconDefinition;
-}
-
-// Type pour un projet (utilisé dans Projects.tsx et la page de détail)
+// ==========================================
+// 2. src/types/index.ts
+// ==========================================
 export interface Project {
-    id: number;
-    title: string;
-    description: string;
-    image: string;      // Chemin vers l'image
-    linkGit: string;    // URL GitHub
-    pdf?: string;       // Le "?" signifie que c'est optionnel (certains projets n'en ont pas)
-    tags: string[];     // Tableau de strings (ex: ["React", "Java"])
-    details: string;    // HTML ou texte long pour la description détaillée
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  longDescription: string;
+  image: string;
+  images?: string[];
+  tags: string[];
+  technologies: {
+    frontend: string[];
+    backend: string[];
+    tools: string[];
+  };
+  links: {
+    github: string | null;
+    demo: string | null;
+    documentation: string | null;
+  };
+  features: string[];
+  date: string;
+  status: 'completed' | 'in-progress' | 'planned';
 }
 
-// Type pour les champs du formulaire de contact (Optionnel, mais utile)
-export interface ContactFormInputs {
-    nom: string;
-    prenom: string;
-    email: string;
-    message: string;
-}
-
-// 1. On définit l'interface pour l'objet d'état de l'animation
-export interface AnimationRef {
-    currentIndex: number;
-    isTyping: boolean;
-    isMounted: boolean;
-}
-
-
-// On définit les types pour nos données
 export interface Skill {
   name: string;
+  category: 'frontend' | 'backend' | 'tools' | 'other';
+  level: number; // 1-5
   icon: React.ReactNode;
   color: string;
 }
 
 export interface SkillCategory {
   title: string;
-  skills: Skill[];
+  skills: Omit<Skill, 'category'>[];
 }
 
-
-//projects
-export interface ProjectCardProps {
-    project: Project;
-    index: number;
-    onOpenModal: (project: Project) => void;
+export interface Experience {
+  id: number;
+  title: string;
+  company: string;
+  period: string;
+  description: string;
+  technologies: string[];
 }
 
-
-export interface ProjectModalProps {
-    show: boolean;
-    onHide: () => void;
-    project: Project | null;
-}
-
-
-//themeContext
-// Définition des types
-export interface ThemeContextType {
-  isDarkMode: boolean;
-  toggleTheme: () => void;
-  theme: 'dark' | 'light';
+export interface NavItem {
+  name: string;
+  href: string;
+  icon?: string;
 }
