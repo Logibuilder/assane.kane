@@ -8,6 +8,13 @@ const nextConfig = {
   assetPrefix: isGithubActions ? `/${repo}/` : '',
   images: {
     unoptimized: true,
+    remotePatterns: isGithubActions ? [
+      {
+        protocol: 'https',
+        hostname: 'assane-kane.github.io',
+        pathname: `/${repo}/**`,
+      }
+    ] : [],
   },
   output: "export",
   trailingSlash: true,

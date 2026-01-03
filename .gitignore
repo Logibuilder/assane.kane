@@ -44,3 +44,17 @@ node_modules/
 
 
 project_key
+
+# Local env files
+.env*.local
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Local env files
+.env*.local
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
