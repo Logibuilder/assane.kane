@@ -1,15 +1,11 @@
-// ==========================================
-// 6. src/components/sections/Hero/Hero.tsx
-// ==========================================
+// src/components/sections/Hero/Hero.tsx
 "use client";
-
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
+import { FiGithub, FiLinkedin, FiArrowDown } from 'react-icons/fi';
 import { Button } from '@/components/ui/Button';
 import { HeroBackground } from './HeroBackground';
 import { siteConfig } from '@/constants/config';
-import styles from './Hero.module.css';
 
 export const Hero: React.FC = () => {
   const scrollToSection = (id: string) => {
@@ -17,114 +13,99 @@ export const Hero: React.FC = () => {
   };
 
   return (
-    <section className={styles.hero}>
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#0a0a0f]">
       <HeroBackground />
       
-      <div className={styles.content}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
-        >
-          {/* Badge */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-20">
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-24 items-center">
+          
+          {/* Colonne de Gauche : Nom */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-block px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full mb-8 shadow-lg"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <span className="text-sm font-medium text-gray-700">
-              👋 Bienvenue sur mon portfolio
-            </span>
+            <h1 className="text-7xl md:text-8xl lg:text-[10rem] font-black text-white leading-[0.9] tracking-tighter">
+              ASSANE
+              <br />
+              KANE
+            </h1>
           </motion.div>
 
-          {/* Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-5xl md:text-7xl font-bold mb-6"
-          >
-            <span className="text-gray-900">Je suis </span>
-            <span className="text-red-500">Assane KANE</span>
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto"
-          >
-            Développeur Full Stack • Passionné par l'innovation et les technologies modernes
-          </motion.p>
-
-          {/* CTAs */}
+          {/* Colonne de Droite : Contenu */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="flex flex-wrap justify-center gap-4 mb-12"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="flex flex-col items-start"
           >
-            <Button
-              size="lg"
-              onClick={() => scrollToSection('#projects')}
-            >
-              Voir mes projets
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => scrollToSection('#contact')}
-              leftIcon={<FiMail />}
-            >
-              Me contacter
-            </Button>
-          </motion.div>
+            {/* Badge de disponibilité */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full mb-8">
+              <span className="w-2 h-2 bg-[#dc3545] rounded-full animate-pulse shadow-[0_0_8px_#dc3545]" />
+              <span className="text-sm text-gray-300">Disponible pour de nouveaux projets</span>
+            </div>
 
-          {/* Social Links */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="flex justify-center gap-4"
-          >
-            <a
-              href={siteConfig.social.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
-            >
-              <FiGithub className="text-xl" />
-            </a>
-            <a
-              href={siteConfig.social.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow"
-            >
-              <FiLinkedin className="text-xl" />
-            </a>
+            {/* Titre du poste */}
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#dc3545] mb-6 leading-tight">
+              Développeur <br />
+              Full Stack
+            </h2>
+
+            {/* Description */}
+            <p className="text-lg text-gray-400 mb-10 max-w-md leading-relaxed">
+              Un développeur Full Stack passionné par l'innovation et les technologies modernes, 
+              spécialisé dans la création d'applications web performantes.
+            </p>
+
+            {/* Boutons d'action */}
+            <div className="flex flex-wrap items-center gap-6">
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => scrollToSection('#projects')}
+                className="rounded-full border-[#dc3545] text-[#dc3545] hover:bg-[#dc3545]/10 px-8"
+              >
+                Voir Mes Projets
+              </Button>
+
+              {/* Réseaux sociaux */}
+              <div className="flex gap-4">
+                {[
+                  { icon: <FiGithub size={24} />, href: siteConfig.social.github },
+                  { icon: <FiLinkedin size={24} />, href: siteConfig.social.linkedin },
+                ].map((social, i) => (
+                  <motion.a
+                    key={i}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -4, scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="text-[#dc3545] hover:text-[#c82333] transition-colors duration-300"
+                  >
+                    {social.icon}
+                  </motion.a>
+                ))}
+              </div>
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        transition={{ delay: 1.2, duration: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10"
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="text-gray-400"
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-2 text-gray-500 cursor-pointer"
+          onClick={() => scrollToSection('#about')}
         >
-          <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-gray-400 rounded-full mt-2" />
-          </div>
+          <FiArrowDown className="text-2xl" />
         </motion.div>
       </motion.div>
     </section>

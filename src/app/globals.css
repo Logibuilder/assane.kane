@@ -2,20 +2,60 @@
 
 @import "tailwindcss";
 
+
 @theme {
-  --color-primary-50: #fff5f5;
-  --color-primary-100: #fed7d7;
-  --color-primary-500: #dc3545; /* Votre rouge principal */
-  --color-primary-600: #c82333;
-  --color-gray-50: #f9fafb;
-  --color-gray-900: #111827;
+  /* 1. Couleurs de la Marque (Invariables) */
+  --color-primary: #dc3545;
+  --color-primary-hover: #c82333;
+
+  /* 2. Couleurs Sémantiques (Connectées aux variables CSS ci-dessous) */
+  --color-background: var(--bg-base);
+  --color-surface: var(--bg-surface);
+  --color-foreground: var(--text-main);
+  --color-muted: var(--text-muted);
+  
+  /* 3. Effets Glassmorphism */
+  --color-glass: var(--glass-bg);
+  --color-glass-border: var(--glass-border);
 }
 
-html {
-  scroll-behavior: smooth;
-}
+@layer base {
+  /* =========================================
+     LIGHT MODE (Mode par défaut)
+     ========================================= */
+  :root {
+    --bg-base: #ffffff;
+    --bg-surface: #f8fafc;
+    --text-main: #0f172a; /* Slate 900 - Contraste fort */
+    --text-muted: #64748b; /* Slate 500 - Texte secondaire */
+    
+    /* Effet verre clair : subtil assombrissement */
+    --glass-bg: rgba(0, 0, 0, 0.02);
+    --glass-border: rgba(0, 0, 0, 0.08);
+  }
 
-body {
-  background-color: var(--gray-50);
-  color: var(--gray-900);
+  /* =========================================
+     DARK MODE (Basé sur ta maquette)
+     ========================================= */
+  .dark {
+    --bg-base: #0a0a0f; /* Fond profond abysse */
+    --bg-surface: #111118; /* Cartes et sections alternées */
+    --text-main: #ffffff; /* Texte pur blanc */
+    --text-muted: #9ca3af; /* Gris clair pour la lisibilité */
+    
+    /* Effet verre sombre : subtil éclaircissement */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Application globale automatique */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
 }
