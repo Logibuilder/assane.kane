@@ -1,6 +1,3 @@
-// ==========================================
-// 9. src/components/ui/Modal/Modal.tsx
-// ==========================================
 "use client";
 
 import React, { useEffect } from 'react';
@@ -25,7 +22,6 @@ export const Modal: React.FC<ModalProps> = ({
   size = 'md',
   className
 }) => {
-  // Bloquer le scroll quand la modale est ouverte
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -37,16 +33,15 @@ export const Modal: React.FC<ModalProps> = ({
     };
   }, [isOpen]);
 
-  // Fermer avec Escape
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
-    
+
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
     }
-    
+
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
@@ -68,31 +63,29 @@ export const Modal: React.FC<ModalProps> = ({
           onClick={onClose}
         >
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
+            initial={{ scale: 0.95, opacity: 0, y: 10 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 10 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             className={cn(
-              "relative bg-white rounded-2xl shadow-2xl w-full max-h-[90vh] overflow-hidden flex flex-col",
+              "relative bg-surface/95 backdrop-blur-xl border border-glass-border rounded-3xl shadow-2xl w-full max-h-[90vh] overflow-hidden flex flex-col",
               sizes[size],
               className
             )}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
             {title && (
-              <div className="flex items-center justify-between p-6 border-b">
-                <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+              <div className="flex items-center justify-between p-6 border-b border-glass-border">
+                <h2 className="text-2xl font-bold text-foreground">{title}</h2>
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                  className="p-2 rounded-full text-muted hover:text-primary hover:bg-glass transition-colors"
                 >
                   <FiX size={24} />
                 </button>
               </div>
             )}
 
-            {/* Content */}
             <div className="flex-1 overflow-y-auto p-6">
               {children}
             </div>

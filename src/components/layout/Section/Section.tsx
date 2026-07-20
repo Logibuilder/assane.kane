@@ -1,20 +1,19 @@
-// ==========================================
-// 3. src/components/layout/Section/Section.tsx
-// ==========================================
 "use client";
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Container } from '../Container';
+import { Container } from '../Container/Container';
+import { SectionBackground } from './SectionBackground';
 
 interface SectionProps {
   id?: string;
   children: React.ReactNode;
   className?: string;
   containerSize?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
-  background?: 'white' | 'gray' | 'gradient';
+  background?: 'default' | 'alternate' | 'gradient';
   noPadding?: boolean;
+  withGlow?: boolean; // Nouvelle option pour activer/désactiver la lueur
+  glowPosition?: 'left' | 'right' | 'center'; // Position de la lueur
 }
 
 export const Section: React.FC<SectionProps> = ({
@@ -22,31 +21,39 @@ export const Section: React.FC<SectionProps> = ({
   children,
   className,
   containerSize = 'xl',
-  background = 'white',
+  background = 'default',
   noPadding = false,
+  withGlow = true, // Activé par défaut
+  glowPosition = 'center',
 }) => {
   const backgrounds = {
-    white: 'bg-white',
-    gray: 'bg-gray-50',
-    gradient: 'bg-gradient-to-br from-gray-50 to-white',
+    default: 'bg-background',
+    alternate: 'bg-surface',
+    gradient: 'bg-gradient-to-b from-background to-surface',
   };
 
   return (
     <motion.section
       id={id}
       className={cn(
+        'relative overflow-hidden', // Ajout de relative et overflow-hidden pour contenir l'arrière-plan
         backgrounds[background],
-        !noPadding && 'py-16 md:py-24',
-        className
+        !noPadding && 'py-24',
+        className,
+        'transition-colors duration-300'
       )}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6 }}
     >
-      <Container size={containerSize}>
-        {children}
-      </Container>
+      {/* Ajout du composant d'arrière-plan */}
+      {withGlow && <SectionBackground glowPosition={glowPosition} />}
+
+      {/* Le contenu doit être au-dessus (z-10) */}
+      <div className="relative z-10">
+        <Container size={containerSize}>{children}</Container>
+      </div>
     </motion.section>
   );
 };

@@ -6,7 +6,7 @@ import { NavItem } from '@/types';
 export const navigationItems: NavItem[] = [
   {
     name: "À propos",
-    href: "#about",
+    href: "#hero",
     icon: "user",
   },
   {

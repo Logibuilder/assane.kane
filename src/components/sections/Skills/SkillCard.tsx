@@ -1,6 +1,3 @@
-// ==========================================
-// 3. src/components/sections/Skills/SkillCard.tsx
-// ==========================================
 "use client";
 
 import React from 'react';
@@ -29,12 +26,12 @@ export const SkillCard: React.FC<SkillCardProps> = ({
         >
           {icon}
         </div>
-        <h4 className="font-semibold text-gray-900 mb-3">{name}</h4>
-        
+        <h4 className="font-semibold text-foreground mb-3">{name}</h4>
+
         {/* Level bar */}
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className="w-full bg-glass border border-glass-border rounded-full h-2 overflow-hidden">
           <motion.div
-            className="h-2 rounded-full"
+            className="h-full rounded-full"
             style={{ backgroundColor: color }}
             initial={{ width: 0 }}
             whileInView={{ width: `${(level / 5) * 100}%` }}
@@ -42,6 +39,7 @@ export const SkillCard: React.FC<SkillCardProps> = ({
             transition={{ duration: 1, delay: 0.2 }}
           />
         </div>
+        <p className="text-xs text-muted mt-2">{level}/5</p>
       </Card>
     </motion.div>
   );

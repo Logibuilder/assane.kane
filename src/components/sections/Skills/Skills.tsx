@@ -1,6 +1,3 @@
-// ==========================================
-// 4. src/components/sections/Skills/Skills.tsx
-// ==========================================
 "use client";
 
 import React from 'react';
@@ -11,15 +8,17 @@ import { skillCategories } from '@/data/skills';
 
 export const Skills: React.FC = () => {
   return (
-    <Section id="skills" background="white">
+    <Section id="skills" background="default">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-4xl font-bold text-center mb-4">Compétences</h2>
-        <div className="w-20 h-1 bg-red-500 mx-auto mb-16"></div>
+        <h2 className="text-5xl font-black text-center text-foreground mb-4 tracking-tight">
+          Compétences
+        </h2>
+        <div className="w-20 h-1.5 bg-primary mx-auto mb-16 rounded-full" />
 
         <div className="space-y-16">
           {skillCategories.map((category, categoryIndex) => (
@@ -30,7 +29,7 @@ export const Skills: React.FC = () => {
               viewport={{ once: true }}
               transition={{ delay: categoryIndex * 0.1 }}
             >
-              <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">
+              <h3 className="text-2xl font-bold text-center text-foreground mb-8">
                 {category.title}
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

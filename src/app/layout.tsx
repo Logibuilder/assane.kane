@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/constants/config";
+import { ThemeProvider } from "@/hooks/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,13 +17,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    // suppressHydrationWarning est nécessaire avec next-themes au niveau de la balise html
+    <html lang="fr" suppressHydrationWarning>
       <body className={inter.className}>
-        {/* On ajoutera le Header ici plus tard */}
-        <main className="min-h-screen flex flex-col">
-          {children}
-        </main>
-        {/* On ajoutera le Footer ici plus tard */}
+        <ThemeProvider 
+          attribute="class" 
+          defaultTheme="dark" 
+          enableSystem 
+          disableTransitionOnChange
+        >
+          <main className="min-h-screen flex flex-col">
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );
