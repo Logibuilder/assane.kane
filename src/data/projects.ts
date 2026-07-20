@@ -168,5 +168,40 @@ export const projects: Project[] = [
     ],
     date: "2026-07",
     status: "completed",
+  },
+  {
+    id: 6,
+    title: "Catiches (ICARE)",
+    slug: "catiches-icare",
+    description: "Plateforme IoT de gestion de passerelles et de capteurs connectés en temps réel",
+    longDescription: `
+      Application full-stack de supervision et de gestion d'objets connectés (passerelles et capteurs).
+      Le projet intègre un back-end robuste (Python/FastAPI) gérant l'authentification sécurisée, les WebSockets et les bases de données,
+      associé à un front-end moderne (React, TypeScript, Tailwind CSS / Shadcn UI) pour le tableau de bord administrateur et utilisateur.
+    `,
+    image: withBasePath("/images/catiches_avatar.png"), // Ajuste le chemin de l'image si besoin
+    images: [
+      withBasePath("/images/catiches_avatar.png")
+    ],
+    tags: ["Python", "FastAPI", "React", "TypeScript", "Docker", "WebSockets"],
+    technologies: {
+      frontend: ["React", "TypeScript", "Tailwind CSS", "Vite"],
+      backend: ["Python", "FastAPI", "", "PostgreSQL"],
+      tools: ["Docker", "Docker Compose", "Git", "Pytest"],
+    },
+    links: {//
+      github: null,  
+      demo: "http://172.28.101.33/login",
+      documentation: null,
+    },
+    features: [
+      "Gestion centralisée des passerelles (gateways) et des capteurs (sensors)",
+      "Communication en temps réel via WebSockets",
+      "Tableau de bord administrateur et gestion des rôles utilisateurs",
+      "Authentification sécurisée et chiffrement",
+      "Conteneurisation complète avec Docker et Docker Compose",
+    ],
+    date: "2026-06",
+    status: "completed",
   }
 ];
