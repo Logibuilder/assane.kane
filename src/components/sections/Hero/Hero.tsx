@@ -42,7 +42,7 @@ export const Hero: React.FC = () => {
               {/* Conteneur de l'image agrandi */}
               <div className="relative z-10 w-48 h-48 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-[3px] border-glass-border bg-glass backdrop-blur-md shadow-2xl">
                 <img
-                  src={withBasePath("/photo-profil.jpg")}
+                  src={withBasePath(siteConfig.photo_profile)}
                   alt="Assane KANE"
                   className="w-full h-full object-cover"
                 />
@@ -69,7 +69,7 @@ export const Hero: React.FC = () => {
             {/* Badge de disponibilité */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-glass backdrop-blur-md border border-glass-border rounded-full mb-6 md:mb-8">
               <span className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_var(--color-primary)]" />
-              <span className="text-sm font-medium text-foreground">Disponible pour de nouveaux projets</span>
+              <span className="text-sm font-medium text-foreground">Disponible pour une alternance</span>
             </div>
 
             {/* Titre du poste */}

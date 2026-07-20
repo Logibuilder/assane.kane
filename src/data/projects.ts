@@ -134,4 +134,39 @@ export const projects: Project[] = [
     date: "2024-03",
     status: "completed",
   },
+  {
+    id: 5,
+    title: "DreamPark",
+    slug: "dream-park",
+    description: "Système de gestion automatisée et intelligente de stationnement multiniveaux",
+    longDescription: `
+      Application modulaire développée en Python suivant l'architecture MVC pour gérer les infrastructures de stationnement.
+      Le système orchestre l'accès automatisé des véhicules, l'allocation dynamique des emplacements selon les dimensions, 
+      la facturation via des bornes, et l'intégration de services annexes (entretien, livraison par voiturier).
+    `,
+    image: withBasePath("/images/dream_parc_avatar.png"),
+    images: [
+      withBasePath("/images/dream_parc_avatar.png")
+    ],
+    tags: ["Python", "MVC", "Unittest", "CLI"],
+    technologies: {
+      frontend: ["CLI (Ligne de commande)"],
+      backend: ["Python 3.11/3.12"],
+      tools: ["Unittest", "MagicMock", "Git"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/dreamPark",
+      demo: null,
+      documentation: null,
+    },
+    features: [
+      "Architecture Modèle-Vue-Contrôleur (MVC) stricte",
+      "Algorithmique de placement optimisée selon les dimensions du véhicule",
+      "Contrôle d'accès et facturation via bornes automatisées",
+      "Simulation d'acheminement automatisé (Téléporteur)",
+      "Suite de tests unitaires complète avec isolation par Mocks",
+    ],
+    date: "2026-07",
+    status: "completed",
+  }
 ];

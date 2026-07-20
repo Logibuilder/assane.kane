@@ -3,7 +3,8 @@
 // ==========================================
 export const siteConfig = {
   name: "Assane KANE",
-  title: "Développeur Full Stack",
+  photo_profile: "/avatar_cv.jpg",
+  title: "Assane KANE | Développeur logiciel",
   description: "Portfolio de Assane KANE - Développeur Full Stack passionné par l'innovation",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://assane-kane.com",
   
