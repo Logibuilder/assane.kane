@@ -22,9 +22,6 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_BASE_PATH: isGithubActions ? `/${repo}` : '',
   },
-  experimental: {
-    turbo: false,
-  },
 };
 
 module.exports = nextConfig;
