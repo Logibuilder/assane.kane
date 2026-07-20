@@ -2,6 +2,7 @@
 // 6. src/data/projects.ts
 // ==========================================
 import { Project } from '@/types';
+import { withBasePath } from '@/lib/paths';
 
 export const projects: Project[] = [
   {
@@ -14,10 +15,10 @@ export const projects: Project[] = [
       L'application prend en compte les disponibilités des enseignants, les salles disponibles,
       et les types de séances (CM, TD, TP) pour générer des plannings optimisés.
     `,
-    image: "/images/imagesEDT/pageConnec.png",
+    image: withBasePath("/images/imagesEDT/pageConnec.png"),
     images: [
-      "/images/imagesEDT/pageConnec.png",
-      "/images/imagesEDT/dashboard.png",
+      withBasePath("/images/imagesEDT/pageConnec.png"),
+      withBasePath("/images/imagesEDT/dashboard.png"),
     ],
     tags: ["Java", "Spring Boot", "PostgreSQL", "React", "FullCalendar"],
     technologies: {
@@ -28,7 +29,7 @@ export const projects: Project[] = [
     links: {
       github: "https://github.com/Logibuilder/gestionEmploiDuTemps",
       demo: null,
-      documentation: "/description/gestionEDT.pdf",
+      documentation: withBasePath("/description/gestionEDT.pdf"),
     },
     features: [
       "Gestion des contraintes de disponibilité des enseignants",
@@ -50,7 +51,7 @@ export const projects: Project[] = [
       Architecture modulaire avec composants réutilisables, système de design cohérent,
       et optimisations pour les performances et le SEO.
     `,
-    image: "/images/portfolio_.png",
+    image: withBasePath("/images/portfolio_.png"),
     tags: ["Next.js", "TypeScript", "Framer Motion", "Tailwind CSS"],
     technologies: {
       frontend: ["Next.js 15", "TypeScript", "Framer Motion", "Tailwind CSS"],
@@ -60,7 +61,7 @@ export const projects: Project[] = [
     links: {
       github: "https://github.com/Logibuilder/assane.kane",
       demo: "https://assane-kane.vercel.app",
-      documentation: "/description/portfolio.pdf",
+      documentation: withBasePath("/description/portfolio.pdf"),
     },
     features: [
       "Architecture Next.js 15 avec App Router",
@@ -81,7 +82,7 @@ export const projects: Project[] = [
       Application web permettant de visualiser les lignes et arrêts du réseau Tisséo.
       Utilise l'API Open Data Tisséo pour récupérer les informations en temps réel.
     `,
-    image: "/images/logo_tisseo.jpeg",
+    image: withBasePath("/images/logo_tisseo.jpeg"),
     tags: ["Svelte", "API REST", "Bootstrap"],
     technologies: {
       frontend: ["Svelte", "Bootstrap"],
@@ -91,7 +92,7 @@ export const projects: Project[] = [
     links: {
       github: "https://github.com/votre-projet-3",
       demo: null,
-      documentation: "/description/app_tisseo.pdf",
+      documentation: withBasePath("/description/app_tisseo.pdf"),
     },
     features: [
       "Affichage dynamique des lignes de transport",
@@ -111,7 +112,7 @@ export const projects: Project[] = [
       Jeu de cartes stratégique en temps réel combinant les univers de League of Legends et Hearthstone.
       Système de matchmaking, gestion de decks et parties multijoueurs via WebSocket.
     `,
-    image: "/images/leagueofstone.png",
+    image: withBasePath("/images/leagueofstone.png"),
     tags: ["React", "Node.js", "MongoDB", "Socket.io"],
     technologies: {
       frontend: ["React", "CSS Modules"],
@@ -121,7 +122,7 @@ export const projects: Project[] = [
     links: {
       github: "https://github.com/Logibuilder/LeaguesOfStones",
       demo: null,
-      documentation: "/description/los-demo.pdf",
+      documentation: withBasePath("/description/los-demo.pdf"),
     },
     features: [
       "Système de combat tour par tour en temps réel",

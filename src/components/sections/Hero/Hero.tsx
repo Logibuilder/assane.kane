@@ -5,6 +5,7 @@ import { FiGithub, FiLinkedin, FiArrowDown, FiDownload } from 'react-icons/fi';
 import { Button } from '@/components/ui/Button/Button';
 import { HeroBackground } from './HeroBackground';
 import { siteConfig } from '@/constants/config';
+import { withBasePath } from '@/lib/paths';
 
 export const Hero: React.FC = () => {
   const scrollToSection = (id: string) => {
@@ -41,7 +42,7 @@ export const Hero: React.FC = () => {
               {/* Conteneur de l'image agrandi */}
               <div className="relative z-10 w-48 h-48 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-[3px] border-glass-border bg-glass backdrop-blur-md shadow-2xl">
                 <img
-                  src="/photo-profil.jpg"
+                  src={withBasePath("/photo-profil.jpg")}
                   alt="Assane KANE"
                   className="w-full h-full object-cover"
                 />
@@ -90,7 +91,7 @@ export const Hero: React.FC = () => {
               {/* Bouton CV (Action Principale) */}
               <Button
                 size="lg"
-                onClick={() => window.open('/Assane_KANE_MON_CV.pdf', '_blank')}
+                onClick={() => window.open(withBasePath('/Assane_KANE_MON_CV.pdf'), '_blank')}
                 className="rounded-full bg-primary text-white hover:bg-primary/90 px-8 transition-all w-full sm:w-auto shadow-[0_0_20px_rgba(220,53,69,0.3)] flex items-center justify-center gap-2"
               >
                 <FiDownload size={18} />
