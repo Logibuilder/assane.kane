@@ -186,7 +186,7 @@ export const projects: Project[] = [
     tags: ["Python", "FastAPI", "React", "TypeScript", "Docker", "WebSockets"],
     technologies: {
       frontend: ["React", "TypeScript", "Tailwind CSS", "Vite"],
-      backend: ["Python", "FastAPI", "", "PostgreSQL"],
+      backend: ["Python", "FastAPI", "PostgreSQL"],
       tools: ["Docker", "Docker Compose", "Git", "Pytest"],
     },
     links: {//
@@ -202,6 +202,150 @@ export const projects: Project[] = [
       "Conteneurisation complète avec Docker et Docker Compose",
     ],
     date: "2026-06",
+    status: "completed",
+  },
+  {
+    id: 7,
+    title: "Serveur FTP Multi-Clients",
+    slug: "ftp-server",
+    description: "Implémentation d'un serveur FTP en Java gérant les connexions simultanées via threads",
+    longDescription: `
+      Développement complet d'un serveur FTP respectant les standards du protocole. 
+      L'application gère les authentifications, la navigation dans les répertoires, et 
+      les transferts de fichiers en mode actif et passif. L'architecture repose sur 
+      le multithreading pour supporter plusieurs clients simultanément.
+    `,
+    image: withBasePath("/images/ftp_server_avatar.png"),
+    images: [
+      withBasePath("/images/ftp_server_avatar.png")
+    ],
+    tags: ["Java", "Réseau", "Multithreading", "Protocoles"],
+    technologies: {
+      frontend: ["Client FTP standard"],
+      backend: ["Java", "Sockets", "Threads"],
+      tools: ["Maven", "Git", "UML"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/ftp_server",
+      demo: "https://github.com/Logibuilder/ftp_server/blob/main/doc/demo_ftp_server.mp4",
+      documentation: null,
+    },
+    features: [
+      "Gestion complète des commandes FTP (USER, PASS, LIST, RETR, STOR, etc.)",
+      "Architecture multithread pour la concurrence des connexions",
+      "Support des modes de transfert de données actif (PORT) et passif (PASV)",
+      "Gestion de système de fichiers virtuel pour la navigation",
+    ],
+    date: "2026-02",
+    status: "completed",
+  },
+  {
+    id: 8,
+    title: "Client FTP",
+    slug: "ftp-client",
+    description: "Application client FTP en ligne de commande développée en Java permettant de naviguer et d'explorer l'arborescence d'un serveur distant.",
+    longDescription: `
+      Logiciel client FTP en ligne de commande développé en Java. Il permet de se connecter à un serveur distant, de naviguer dans les dossiers et de lister les fichiers. 
+      Sa fonctionnalité principale réside dans l'exploration récursive de l'arborescence du serveur selon deux algorithmes : le parcours en profondeur (DFS) et le parcours en largeur (BFS). 
+      Il intègre un mécanisme de reconnexion automatique en cas de panne réseau et permet d'exporter la structure explorée au format JSON.
+    `,
+    image: withBasePath("/images/ftp_client_avatar.png"),
+    images: [
+      withBasePath("/images/ftp_client_avatar.png")
+    ],
+    tags: ["Java", "Réseau", "CLI", "Algorithmique"],
+    technologies: {
+      frontend: ["CLI (Ligne de commande)"],
+      backend: ["Java", "Sockets", "Gson"],
+      tools: ["Maven", "Git", "JUnit 5", "Mockito"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/ftpclient",
+      demo: "https://github.com/Logibuilder/ftpclient/blob/main/demo-client-ftp.mkv",
+      documentation:null,
+    },
+    features: [
+      "Connexion et authentification au serveur FTP avec gestion du mode passif (PASV)",
+      "Navigation interactive et listage des dossiers distants (CWD, CDUP, PWD, LIST, NLST)",
+      "Exploration récursive de l'arborescence via les algorithmes DFS et BFS",
+      "Exportation de la structure des fichiers au format JSON via Gson (Pattern Composite)",
+      "Mécanisme de résilience avec reconnexion automatique après perte de connexion réseau",
+      "Architecture modulaire utilisant les design patterns Façade et Composite"
+    ],
+    date: "2026-01",
+    status: "completed",
+  },
+  {
+    id: 9,
+    title: "FlopBox",
+    slug: "flopbox",
+    description: "Proxy REST pour serveurs FTP avec sécurité JWT, permettant de piloter des serveurs distants via une API HTTP.",
+    longDescription: `
+      FlopBox est un proxy REST développé en Java 21 et Spring Boot 3.4.3. Il permet à un client HTTP de piloter des serveurs FTP distants (liste, création, renommage, suppression, téléchargement) sans implémenter le protocole FTP. 
+      Le projet intègre une authentification stateless sécurisée par JWT, une base de données H2 en mémoire pour l'enregistrement des alias de serveurs, et utilise les design patterns Façade, Adaptateur et DTO pour une architecture logicielle découplée et robuste.
+    `,
+    image: withBasePath("/images/flopbox_avatar.png"),
+    images: [
+      withBasePath("/images/flopbox_avatar.png")
+    ],
+    tags: ["Java 21", "Spring Boot", "REST API", "JWT", "FTP"],
+    technologies: {
+      frontend: ["Client HTTP", "Swagger UI"],
+      backend: ["Java 21", "Spring Boot 3.4.3", "Spring Security", "Apache Commons Net", "H2 Database", "JJWT"],
+      tools: ["Maven", "Git", "UML"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/flopbox",
+      demo: "https://github.com/Logibuilder/flopbox/blob/main/src/flopbox-demo.mkv",
+      documentation: null,
+    },
+    features: [
+      "Exposition d'une API REST complète pour piloter des serveurs FTP distants",
+      "Authentification stateless avec JWT (Access tokens de 15 min & Refresh tokens de 7 jours)",
+      "Recherche récursive globale et tolérante aux pannes sur multi-serveurs avec garde-fous",
+      "Téléchargement et téléversement de fichiers en streaming avec fermeture propre des sockets FTP",
+      "Base de données H2 en mémoire pour la gestion centralisée des serveurs",
+      "Traduction dynamique des codes de réponse FTP en codes HTTP via un Adaptateur"
+    ],
+    date: "2026-03",
+    status: "completed",
+  },
+  {
+    id: 11,
+    title: "FlopBox Agent",
+    slug: "flopbox-agent",
+    description: "Agent de synchronisation multi-serveurs automatique et console interactive pour la gestion de la corbeille distante.",
+    longDescription: `
+      Application cliente Java en console conçue pour synchroniser automatiquement des serveurs FTP distants via la plateforme FlopBox. 
+      Elle relève le défi technique de l'exécution multi-threadée, séparant une boucle de synchronisation bidirectionnelle en tâche de fond (toutes les 60 secondes) d'une console interactive s'exécutant sur le thread principal. 
+      L'agent intègre une détection intelligente des renommages locaux basés sur des heuristiques de taille et de date pour optimiser les transferts réseau. Une gestion rigoureuse de l'alignement des horloges (timestamps) entre le FTP et le système d'exploitation local évite les faux positifs de synchronisation. 
+      Enfin, une technique de 'fichier fantôme' (ghost file) est implémentée lors de la restauration de fichiers depuis la corbeille pour garantir la cohérence des états locaux et distants lors du cycle suivant.
+    `,
+    image: withBasePath("/images/flopbox_agent_avatar.jpg"), // Image à générer ultérieurement
+    images: [
+      withBasePath("/images/flopbox_agent_avatar.jpg")
+    ],
+    tags: ["Java 21", "Multi-threading", "Asynchrone", "Architecture logicielle"],
+    technologies: {
+      frontend: ["Console interactive"],
+      backend: ["Java 21", "HttpClient Asynchrone", "ScheduledExecutorService", "Records", "Jackson Databind"],
+      tools: ["Maven", "Git", "JUnit 5", "Mockito", "Logback"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/flopbox-agent", 
+      demo: null,
+      documentation: null,
+    },
+    features: [
+      "Authentification sécurisée JWT (stateless)",
+      "Synchronisation bidirectionnelle multi-serveurs automatique et planifiée (background thread)",
+      "Console interactive de gestion de la corbeille distante (.deleted)",
+      "Détection heuristique intelligente des renommages locaux pour optimiser la bande passante",
+      "Optimisation des performances via E/S Asynchrones non bloquantes (sendAsync)",
+      "Alignement précis des timestamps FTP/OS pour éviter les cycles de synchro inutiles",
+      "Algorithme de cohérence par 'fichier fantôme' lors de la restauration distante"
+    ],
+    date: "2026-04", // Date indicative basée sur Mars 2026 pour FlopBox Proxy
     status: "completed",
   }
 ];
