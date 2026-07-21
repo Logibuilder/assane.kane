@@ -7,7 +7,7 @@ import { withBasePath } from '@/lib/paths';
 export const projects: Project[] = [
   {
     id: 1,
-    title: "Gestion des emplois du temps",
+    title: "Gestion emplois du temps",
     slug: "gestion-emplois-du-temps",
     description: "Application web de gestion d'emplois du temps pour établissements scolaires avec contraintes de disponibilité",
     longDescription: `
@@ -83,7 +83,7 @@ export const projects: Project[] = [
       Utilise l'API Open Data Tisséo pour récupérer les informations en temps réel.
     `,
     image: withBasePath("/images/logo_tisseo.jpeg"),
-    tags: ["Svelte", "API REST", "Bootstrap"],
+    tags: ["Svelte", "API REST", "Bootstrap", "Git"],
     technologies: {
       frontend: ["Svelte", "Bootstrap"],
       backend: ["API Tisséo"],
@@ -253,7 +253,7 @@ export const projects: Project[] = [
     images: [
       withBasePath("/images/ftp_client_avatar.png")
     ],
-    tags: ["Java", "Réseau", "CLI", "Algorithmique"],
+    tags: ["Java", "Réseau", "Algorithmique", "CLI"],
     technologies: {
       frontend: ["CLI (Ligne de commande)"],
       backend: ["Java", "Sockets", "Gson"],
@@ -325,10 +325,10 @@ export const projects: Project[] = [
     images: [
       withBasePath("/images/flopbox_agent_avatar.jpg")
     ],
-    tags: ["Java 21", "Multi-threading", "Asynchrone", "Architecture logicielle"],
+    tags: ["Java", "Multi-threading", "Maven", ],
     technologies: {
       frontend: ["Console interactive"],
-      backend: ["Java 21", "HttpClient Asynchrone", "ScheduledExecutorService", "Records", "Jackson Databind"],
+      backend: ["Java21", "HttpClient Asynchrone", "Records", "ScheduledExecutorService", "Jackson Databind"],
       tools: ["Maven", "Git", "JUnit 5", "Mockito", "Logback"],
     },
     links: {
@@ -395,7 +395,7 @@ export const projects: Project[] = [
     images: [
       withBasePath("/images/100_exercices_to_learn_rust_avatar.png")
     ],
-    tags: ["Rust", "Apprentissage", "Formation", "Algorithmique"],
+    tags: ["Rust", "Formation", "Algo"],
     technologies: {
       frontend: [],
       backend: ["Rust"],

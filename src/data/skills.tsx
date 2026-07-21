@@ -9,7 +9,7 @@ import {
   SiSpringboot, SiPostgresql, SiJavascript, SiTypescript, 
   SiNextdotjs, SiBootstrap, SiTailwindcss, SiFastapi, 
   SiMongodb, SiDocker, SiSvelte, SiFramer, SiSocketdotio, SiShadcnui,
-  SiRust
+  SiRust, SiCplusplus, SiKotlin, SiAndroid, SiC
 } from 'react-icons/si';
 
 export const skillCategories: SkillCategory[] = [
@@ -21,6 +21,24 @@ export const skillCategories: SkillCategory[] = [
         icon: <FaJava />, 
         color: "#e76f00",
         level: 5,
+      },
+      { 
+        name: "Kotlin", 
+        icon: <SiKotlin />, 
+        color: "#7F52FF",
+        level: 3,
+      },
+      { 
+        name: "C++", 
+        icon: <SiCplusplus />, 
+        color: "#00599C",
+        level: 3,
+      },
+      { 
+        name: "C", 
+        icon: <SiC />, 
+        color: "#00599C",
+        level: 3,
       },
       { 
         name: "Rust", 
@@ -75,6 +93,12 @@ export const skillCategories: SkillCategory[] = [
   {
     title: "Frontend Moderne",
     skills: [
+      { 
+        name: "Android", 
+        icon: <SiAndroid />, 
+        color: "#3DDC84",
+        level: 3,
+      },
       { 
         name: "React.js", 
         icon: <FaReact />, 
