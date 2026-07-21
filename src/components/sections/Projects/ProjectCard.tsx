@@ -49,6 +49,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) =>
                 <FiExternalLink /> Demo
               </button>
             )}
+            {project.links.documentation && (
+              <button onClick={(e) => { e.stopPropagation(); window.open(project.links.documentation!, '_blank'); }} className="flex items-center gap-2 text-sm font-medium text-muted hover:text-primary transition-colors">
+                <FiFileText /> Doc
+              </button>
+            )}
           </div>
         </div>
       </Card>

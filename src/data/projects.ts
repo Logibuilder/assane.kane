@@ -345,7 +345,145 @@ export const projects: Project[] = [
       "Alignement précis des timestamps FTP/OS pour éviter les cycles de synchro inutiles",
       "Algorithme de cohérence par 'fichier fantôme' lors de la restauration distante"
     ],
-    date: "2026-04", // Date indicative basée sur Mars 2026 pour FlopBox Proxy
+    date: "2026-04", 
+    status: "completed",
+  },
+  {
+    id: 12,
+    title: "Audio File Player",
+    slug: "audio-file-player",
+    description: "Lecteur audio performant et extensible en ligne de commande (CLI) avec pipeline de traitement modulaire.",
+    longDescription: `
+      Ce projet est un lecteur audio simple en ligne de commande écrit en Rust. Il met en œuvre un pipeline de traitement audio modulaire permettant le décodage, la gestion d'état et la lecture en temps réel sur le matériel système. L'architecture exploite les concepts avancés de concurrence de Rust, tels que les canaux de communication non bloquants (\`mpsc\`) et le partage d'état sécurisé via \`Arc<Mutex<T>>\`. La conception repose sur des Traits pour abstraire la sortie audio, rendant l'application facilement extensible à d'autres backends.
+    `,
+    image: withBasePath("/images/audio_file_player_avatar.png"), 
+    images: [
+      withBasePath("/images/audio_file_player_avatar.png")
+    ],
+    tags: ["Rust", "CLI", "Audio", "Multi-threading", "CPAL"],
+    technologies: {
+      frontend: ["Console CLI", "Crossterm"],
+      backend: ["Rust", "Symphonia", "CPAL", "mpsc"],
+      tools: ["Cargo", "Git"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/audio-file-player",
+      demo: null,
+      documentation: null,
+    },
+    features: [
+      "Interface utilisateur interactive en ligne de commande (CLI) pour piloter la lecture, mettre en pause, stopper et régler le volume",
+      "Décodage audio optimisé par morceaux (chunks) via la bibliothèque Symphonia (supportant MP3, WAV, FLAC, ISOMP4)",
+      "Sortie audio bas niveau gérée de manière asynchrone par la bibliothèque CPAL",
+      "Architecture concurrente thread-safe séparant l'interface utilisateur, la gestion d'état (Pipeline) et le moteur audio",
+      "Abstraction logicielle de la sortie audio utilisant le système de Traits de Rust",
+      "Suite complète de tests unitaires et d'intégration validant le pipeline, les commandes et le décodage"
+    ],
+    date: "2026-05", 
+    status: "completed",
+  },
+  {
+    id: 13,
+    title: "100 Exercises Rust",
+    slug: "100-exercises-to-learn-rust",
+    description: "Formation pratique et interactive pour maîtriser les concepts fondamentaux et avancés du langage Rust.",
+    longDescription: `
+      Ce projet retrace mon parcours à travers le cours "100 Exercises To Learn Rust" développé par Mainmatter et écrit par Luca Palmieri. 
+      Basée sur la méthodologie de "l'apprentissage par la pratique", cette formation couvre l'intégralité du langage Rust de manière progressive. Elle aborde la syntaxe de base, le système de types, les structures, les énumérations, et plonge dans les concepts plus complexes comme la gestion de la mémoire (Stack/Heap, Ownership, Lifetimes), le multi-threading (Channels, Mutex) et la programmation asynchrone (Futures).
+    `,
+    image: withBasePath("/images/100_exercices_to_learn_rust_avatar.png"), // Image à générer ultérieurement
+    images: [
+      withBasePath("/images/100_exercices_to_learn_rust_avatar.png")
+    ],
+    tags: ["Rust", "Apprentissage", "Formation", "Algorithmique"],
+    technologies: {
+      frontend: [],
+      backend: ["Rust"],
+      tools: ["Git", "wr (Workshop Runner CLI)", "Cargo"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/100_execices_to_learn_rust", 
+      demo: null,
+      documentation : "https://academy.jetbrains.com/course/16631",
+    },
+    features: [
+      "Résolution d'une centaine d'exercices pratiques couvrant la bibliothèque standard et l'écosystème Rust",
+      "Validation continue et automatisée des exercices via l'outil en ligne de commande 'wr'",
+      "Manipulation avancée de la mémoire : Ownership, Lifetimes, pointeurs intelligents (Box, Rc, Arc)",
+      "Implémentation du multi-threading : Scoped threads, Channels (synchrones et asynchrones), RwLock",
+      "Pratique de la programmation asynchrone (Async/Await, Futures) et des traits spécifiques de Rust",
+      "Gestion rigoureuse des erreurs via le pattern matching, Result, et la crate 'thiserror'"
+    ],
+    date: "2026-05", 
+    status: "completed",
+  },
+  {
+    id: 14,
+    title: "Pokémon Battle Simulator",
+    slug: "pokemon-battle",
+    description: "Simulateur de combats Pokémon en équipe automatisé en console, illustrant les concepts avancés de la POO en C++.",
+    longDescription: `
+      Ce projet est une application console simulant un tournoi automatisé entre deux dresseurs. Chaque joueur reçoit une équipe générée aléatoirement et s'affronte dans un combat au tour par tour. 
+      Le moteur de jeu intègre les statistiques (PV, Attaque, Défense, Vitesse), le hasard et un système d'affinités de types (Eau, Feu, Plante). L'architecture du code met en pratique les concepts fondamentaux de la Programmation Orientée Objet en C++ : classes abstraites, héritage, polymorphisme, gestion dynamique de la mémoire avec des pointeurs, et utilisation de la bibliothèque standard (STL).
+    `,
+    // Remplacement du lien blob par le lien raw, et retrait de withBasePath
+    image: "https://raw.githubusercontent.com/Logibuilder/pokemon-battle/main/pokemon-battle.png", 
+    images: [
+      "https://raw.githubusercontent.com/Logibuilder/pokemon-battle/main/pokemon-battle.png"
+    ],
+    tags: ["C++", "POO", "STL", "Jeu"],
+    technologies: {
+      frontend: ["Console CLI"],
+      backend: ["C++", "STL (Standard Template Library)", "API Windows (<windows.h>)"],
+      tools: ["G++ (MinGW)", "Git"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/pokemon-battle",
+      demo: null,
+      documentation: null,
+    },
+    features: [
+      "Système de types (Pierre-Feuille-Ciseaux) avec gestion des avantages et faiblesses",
+      "Combat d'équipe automatisé avec remplacement dynamique des Pokémon K.O.",
+      "Architecture POO exploitant le polymorphisme, l'héritage et les classes abstraites",
+      "Attaques spécifiques par type gérées via des collections de la STL (std::map, std::list)",
+      "Interface console rythmée en temps réel via temporisation de l'API Windows"
+    ],
+    date: "2024-01", 
+    status: "completed",
+  },
+  {
+    id: 15,
+    title: "Tisseo Android",
+    slug: "tisseo-android",
+    description: "Application Android moderne pour consulter les horaires en temps réel du réseau de transport Tisséo (Toulouse Métropole).",
+    longDescription: `
+      Application mobile développée en Kotlin dans le cadre du Master 1 Informatique de l'Université de Lille. 
+      Elle repose sur les principes de Clean Architecture et du pattern MVVM pour garantir un code modulaire et maintenable. L'application permet de rechercher des arrêts, de consulter les lignes et les horaires en temps réel, de gérer des favoris accessibles hors connexion (grâce à Room), et de visualiser le tracé des lignes sur une carte interactive.
+    `,
+    image: withBasePath("/images/app_tisseo_avatar.png"), 
+    images: [
+      withBasePath("/images/app_tisseo_avatar.png")
+    ],
+    tags: ["Android", "Kotlin", "MVVM", "Jetpack Compose", "Clean Architecture"],
+    technologies: {
+      frontend: ["Jetpack Compose", "Material 3", "Navigation Compose"],
+      backend: ["Kotlin 2.0.21", "Coroutines & Flow", "Retrofit", "Moshi", "Room (SQLite)"],
+      tools: ["OSMDroid (OpenStreetMap)", "Git"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/Tisseo", 
+      demo: null,
+      documentation: null,
+    },
+    features: [
+      "Recherche d'arrêts avec autocomplétion (minimum 3 caractères)",
+      "Affichage des horaires, des alertes et des informations trafic en temps réel",
+      "Sauvegarde des arrêts favoris avec disponibilité hors connexion et export au format JSON",
+      "Visualisation cartographique des lignes de transport via OpenStreetMap (OSMDroid)",
+      "Architecture robuste (Clean Architecture, MVVM) avec gestion centralisée des erreurs"
+    ],
+    date: "2025-12", 
     status: "completed",
   }
 ];
