@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX, FiMoon, FiSun } from 'react-icons/fi';
 import { useTheme } from 'next-themes';
@@ -12,33 +12,52 @@ export const Header: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
+  // Cible de scroll en attente, appliquée seulement une fois l'animation de sortie terminée
+  const pendingScrollTarget = useRef<string | null>(null);
+
   useEffect(() => {
     setMounted(true);
-    const handleScroll = () => {
-      // On déclenche l'effet verre un peu plus tard pour laisser respirer le Hero
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const scrollToTarget = (href: string) => {
+    if (href.startsWith('#')) {
+      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.location.href = href;
+    }
+  };
+
   const handleNavClick = (href: string) => {
-    setIsMobileMenuOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    if (isMobileMenuOpen) {
+      // Menu mobile ouvert : on mémorise la cible, on ferme,
+      // et onExitComplete se chargera de scroller au bon moment
+      pendingScrollTarget.current = href;
+      setIsMobileMenuOpen(false);
+    } else {
+      // Desktop : rien à attendre, on scrolle direct
+      scrollToTarget(href);
+    }
+  };
+
+  const handleMobileToggle = () => {
+    setIsMobileMenuOpen((prev) => {
+      return !prev;
+    });
   };
 
   return (
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-        // Au scroll : fond flouté très subtil et padding réduit. En haut : 100% transparent.
-        isScrolled 
-          ? "bg-background/70 backdrop-blur-lg border-b border-glass-border py-2" 
+        (isScrolled || isMobileMenuOpen)
+          ? "bg-background/95 backdrop-blur-lg border-b border-glass-border py-2"
           : "bg-transparent py-6"
       )}
     >
-      <nav className="max-w-7xl mx-auto px-6 flex justify-between items-center h-12">
-        {/* Logo Minimaliste */}
+      <nav className="max-w-7xl mx-auto px-6 flex justify-between items-center h-12 relative">
         <motion.div
           className="text-3xl font-black text-primary cursor-pointer tracking-tighter"
           initial={{ opacity: 0, y: -20 }}
@@ -48,10 +67,7 @@ export const Header: React.FC = () => {
           AK
         </motion.div>
 
-        {/* Navigation Desktop - Conteneur global */}
         <div className="hidden md:flex items-center">
-          
-          {/* 1. Toggle Thème (Déplacé à gauche) */}
           {mounted && (
             <motion.button
               initial={{ opacity: 0, y: -20 }}
@@ -64,10 +80,8 @@ export const Header: React.FC = () => {
             </motion.button>
           )}
 
-          {/* 2. Ligne de séparation */}
           <div className="w-px h-5 bg-glass-border mx-6"></div>
 
-          {/* 3. Liens texte pur */}
           <div className="flex items-center gap-10">
             {navigationItems.map((item, index) => (
               <motion.a
@@ -88,7 +102,6 @@ export const Header: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Controls */}
         <div className="md:hidden flex items-center gap-6">
           {mounted && (
             <button
@@ -100,25 +113,34 @@ export const Header: React.FC = () => {
           )}
           <button
             className="text-foreground hover:text-primary transition-colors"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={handleMobileToggle}
           >
             {isMobileMenuOpen ? <FiX size={26} /> : <FiMenu size={26} />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu (Plein écran ou Dropdown élégant) */}
-      <AnimatePresence>
+      <AnimatePresence
+        onExitComplete={() => {
+          // L'animation de fermeture est réellement terminée : on peut scroller
+          if (pendingScrollTarget.current) {
+            scrollToTarget(pendingScrollTarget.current);
+            pendingScrollTarget.current = null;
+          }
+        }}
+      >
         {isMobileMenuOpen && (
           <motion.div
+            key="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background/95 backdrop-blur-xl border-b border-glass-border overflow-hidden"
+            transition={{ duration: 0.2 }}
+            className="md:hidden absolute top-full left-0 w-full bg-background/95 backdrop-blur-xl border-b border-glass-border shadow-xl overflow-hidden"
           >
             <div className="px-6 py-8 flex flex-col gap-6 items-center">
               {navigationItems.map((item) => (
-                <a
+                <a 
                   key={item.href}
                   href={item.href}
                   onClick={(e) => {

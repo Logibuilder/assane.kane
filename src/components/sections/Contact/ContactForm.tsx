@@ -6,8 +6,7 @@ import { Button } from '@/components/ui/Button/Button';
 import { FiSend, FiCheck } from 'react-icons/fi';
 
 export const ContactForm: React.FC = () => {
-  const [state, handleSubmit] = useForm("xvgqdpgy"); // TODO: remplacer par ton ID Formspree
-  
+  const [state, handleSubmit] = useForm(process.env.NEXT_PUBLIC_FORMSPREE_ID!); // TODO: remplacer par ton ID Formspree
   // 1. Ajout de 'subject' dans l'état initial
   const [formData, setFormData] = useState({
     name: '',
