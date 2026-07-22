@@ -34,11 +34,10 @@ export const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold text-foreground mb-6">À propos</h3>
             <p className="text-muted leading-relaxed mb-4">
-              Développeur Full Stack passionné par l'innovation et les technologies modernes. 
-              Je transforme des idées complexes en applications web performantes et intuitives.
+              Étudiant en développement Full Stack basé Lille. Passionné et rigoureux, je suis à la recherche d'une alternance pour construire ensemble des applications web et mobiles innovantes.
             </p>
-            <a href="#about" className="text-primary hover:text-primary-hover font-medium transition-colors">
-              En savoir plus →
+            <a href="#hero" className="text-primary hover:text-primary-hover font-medium transition-colors">
+              En savoir plus sur mon cv→
             </a>
           </div>
 

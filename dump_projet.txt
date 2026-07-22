@@ -1,0 +1,3249 @@
+=== ./.eslintrc.json ===
+{
+  "extends": "next/core-web-vitals"
+}
+=== ./.github/workflows/nextjs.yml ===
+# Sample workflow for building and deploying a Next.js site to GitHub Pages
+#
+# To get started with Next.js see: https://nextjs.org/docs/getting-started
+#
+name: Deploy Next.js site to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Detect package manager
+        id: detect-package-manager
+        run: |
+          if [ -f "${{ github.workspace }}/yarn.lock" ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+            echo "command=install" >> $GITHUB_OUTPUT
+            echo "runner=yarn" >> $GITHUB_OUTPUT
+            exit 0
+          elif [ -f "${{ github.workspace }}/package.json" ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+            echo "command=ci" >> $GITHUB_OUTPUT
+            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
+            exit 0
+          else
+            echo "Unable to determine package manager"
+            exit 1
+          fi
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: ${{ steps.detect-package-manager.outputs.manager }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          # Automatically inject basePath in your Next.js configuration file and disable
+          # server side image optimization (https://nextjs.org/docs/api-reference/next/image#unoptimized).
+          #
+          # You may remove this line if you want to manage the configuration yourself.
+          static_site_generator: next
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
+      - name: Install dependencies
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+      - name: Build with Next.js
+        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        env:
+          NEXT_PUBLIC_FORMSPREE_ID: ${{ secrets.NEXT_PUBLIC_FORMSPREE_ID }}
+          NEXT_PUBLIC_SITE_URL: https://logibuilder.github.io/assane.kane
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+=== ./jsconfig.json ===
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+
+=== ./next.config.js ===
+const isGithubActions = process.env.GITHUB_ACTIONS || false;
+const repo = "assane.kane";
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  basePath: isGithubActions ? `/${repo}` : '',
+  assetPrefix: isGithubActions ? `/${repo}/` : '',
+  images: {
+    unoptimized: true,
+    remotePatterns: isGithubActions ? [
+      {
+        protocol: 'https',
+        hostname: 'assane-kane.github.io',
+        pathname: `/${repo}/**`,
+      }
+    ] : [],
+  },
+  output: "export",
+  trailingSlash: true,
+  // Important pour GitHub Pages
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isGithubActions ? `/${repo}` : '',
+  },
+};
+
+module.exports = nextConfig;
+=== ./next.config.mjs ===
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+};
+
+export default nextConfig;
+
+=== ./next-env.d.ts ===
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+import "./.next/dev/types/routes.d.ts";
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+
+=== ./package.json ===
+{
+  "name": "assane.kane",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "deploy": "npm run build && gh-pages -d out"
+  },
+  "dependencies": {
+    "@formspree/react": "^2.5.5",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "bootstrap": "^5.3.3",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.26",
+    "next": "^16.2.10",
+    "next-themes": "^0.4.6",
+    "react": "^19.2.7",
+    "react-bootstrap": "^2.10.9",
+    "react-dom": "^19.2.7",
+    "react-icons": "^5.5.0",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.7",
+    "gh-pages": "^6.3.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "5.7.3"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "overrides": {
+    "next": {
+      "postcss": "8.5.20"
+    }
+  }
+}
+
+=== ./postcss.config.js ===
+module.exports = {
+  plugins: {
+    '@tailwindcss/postcss': {},
+    autoprefixer: {},
+  },
+}
+
+
+=== ./README.md ===
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+
+[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+
+This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+
+=== ./src/app/globals.css ===
+@tailwind utilities;
+
+@import "tailwindcss";
+
+
+@theme {
+  /* 1. Couleurs de la Marque (Invariables) */
+  --color-primary: #dc3545;
+  --color-primary-hover: #c82333;
+
+  /* 2. Couleurs Sémantiques (Connectées aux variables CSS ci-dessous) */
+  --color-background: var(--bg-base);
+  --color-surface: var(--bg-surface);
+  --color-foreground: var(--text-main);
+  --color-muted: var(--text-muted);
+  
+  /* 3. Effets Glassmorphism */
+  --color-glass: var(--glass-bg);
+  --color-glass-border: var(--glass-border);
+}
+
+@layer base {
+  /* =========================================
+     LIGHT MODE (Mode par défaut)
+     ========================================= */
+  :root {
+    --bg-base: #ffffff;
+    --bg-surface: #f8fafc;
+    --text-main: #0f172a; /* Slate 900 - Contraste fort */
+    --text-muted: #64748b; /* Slate 500 - Texte secondaire */
+    
+    /* Effet verre clair : subtil assombrissement */
+    --glass-bg: rgba(0, 0, 0, 0.02);
+    --glass-border: rgba(0, 0, 0, 0.08);
+  }
+
+  /* =========================================
+     DARK MODE (Basé sur ta maquette)
+     ========================================= */
+  .dark {
+    --bg-base: #0a0a0f; /* Fond profond abysse */
+    --bg-surface: #111118; /* Cartes et sections alternées */
+    --text-main: #ffffff; /* Texte pur blanc */
+    --text-muted: #9ca3af; /* Gris clair pour la lisibilité */
+    
+    /* Effet verre sombre : subtil éclaircissement */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Application globale automatique */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+=== ./src/app/layout.tsx ===
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { siteConfig } from "@/constants/config";
+import { ThemeProvider } from "@/hooks/ThemeProvider";
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: siteConfig.title,
+  description: siteConfig.description,
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    // suppressHydrationWarning est nécessaire avec next-themes au niveau de la balise html
+    <html lang="fr" suppressHydrationWarning>
+      <body className={inter.className}>
+        <ThemeProvider 
+          attribute="class" 
+          defaultTheme="dark" 
+          enableSystem 
+          disableTransitionOnChange
+        >
+          <main className="min-h-screen flex flex-col">
+            {children}
+          </main>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
+=== ./src/app/page.tsx ===
+import { Header } from "@/components/layout/Header/Header";
+import { Hero } from "@/components/sections/Hero/Hero";
+import {Projects}  from "@/components/sections/Projects/Projects";
+import {Skills}  from "@/components/sections/Skills/Skills";
+import {Contact}  from "@/components/sections/Contact/Contact";
+import { About } from "@/components/sections/About/About";
+import { Footer } from "@/components/layout/Footer/Footer"; 
+
+export default function Home() {
+  return (
+    <>
+      <Header />
+      <main>
+        {/* <About />  */}
+        <Hero /> 
+        <Skills /> 
+        <Projects /> 
+        <Contact /> 
+        <Footer /> 
+      </main>
+      {/* <Footer />  */}
+    </>
+  );
+}
+=== ./src/components/layout/Container/Container.tsx ===
+// ==========================================
+// 1. src/components/layout/Container/Container.tsx
+// ==========================================
+import React from 'react';
+import { cn } from '@/lib/utils';
+
+interface ContainerProps {
+  children: React.ReactNode;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+}
+
+export const Container: React.FC<ContainerProps> = ({ 
+  children, 
+  className,
+  size = 'xl'
+}) => {
+  const sizes = {
+    sm: 'max-w-3xl',
+    md: 'max-w-5xl',
+    lg: 'max-w-6xl',
+    xl: 'max-w-7xl',
+    full: 'max-w-full',
+  };
+
+  return (
+    <div className={cn('mx-auto px-4 sm:px-6 lg:px-8', sizes[size], className)}>
+      {children}
+    </div>
+  );
+};
+=== ./src/components/layout/Container/index.ts ===
+// ==========================================
+// 2. src/components/layout/Container/index.ts
+// ==========================================
+export { Container } from './Container';
+=== ./src/components/layout/Footer/Footer.tsx ===
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FiMail, FiArrowUp } from 'react-icons/fi';
+import { Container } from '../Container/Container';
+import { siteConfig } from '@/constants/config';
+import { navigationItems } from '@/constants/navigation';
+
+export const Footer: React.FC = () => {
+  const currentYear = new Date().getFullYear();
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <footer className="relative bg-background border-t border-glass-border pt-16 pb-8 transition-colors duration-300">
+      {/* Bouton retour en haut */}
+      <motion.button
+        onClick={scrollToTop}
+        whileHover={{ y: -4 }}
+        whileTap={{ scale: 0.95 }}
+        className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/20"
+        aria-label="Retour en haut"
+      >
+        <FiArrowUp size={20} />
+      </motion.button>
+
+      <Container>
+        {/* Section Supérieure : Grille de 3 colonnes */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+          {/* Colonne 1 : À propos */}
+          <div>
+            <h3 className="text-xl font-bold text-foreground mb-6">À propos</h3>
+            <p className="text-muted leading-relaxed mb-4">
+              Développeur Full Stack passionné par l'innovation et les technologies modernes. 
+              Je transforme des idées complexes en applications web performantes et intuitives.
+            </p>
+            <a href="#about" className="text-primary hover:text-primary-hover font-medium transition-colors">
+              En savoir plus →
+            </a>
+          </div>
+
+          {/* Colonne 2 : Liens utiles */}
+          <div>
+            <h3 className="text-xl font-bold text-foreground mb-6">Liens utiles</h3>
+            <ul className="space-y-3">
+              {navigationItems.map((item) => (
+                <li key={item.href}>
+                  <a href={item.href} className="text-muted hover:text-primary transition-colors">
+                    {item.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Colonne 3 : Contact rapide */}
+          <div>
+            <h3 className="text-xl font-bold text-foreground mb-6">Contacte moi</h3>
+            
+            {/* <a // <--- PREMIÈRE CORRECTION ICI
+              href={`mailto:${siteConfig.author.email}`}
+              className="flex items-center gap-3 text-muted hover:text-primary transition-colors mb-4"
+            >
+              <FiMail size={18} />
+              <span>{siteConfig.author.email}</span>
+            </a> */}
+            
+            <a // <--- DEUXIÈME CORRECTION ICI
+              href="#contact"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-glass border border-glass-border text-foreground hover:border-primary/50 hover:text-primary transition-all text-sm font-medium"
+            >
+              Envoyer un message →
+            </a>
+          </div>
+        </div>
+
+        {/* Section Milieu : Réseaux sociaux */}
+        <div className="flex justify-center gap-6 mb-8">
+          <a
+            href={siteConfig.social.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted hover:text-primary transition-all duration-300 p-3 bg-glass rounded-full border border-glass-border hover:border-primary/50 hover:shadow-[0_0_20px_-4px_var(--color-primary)]"
+          >
+            <FaLinkedin size={22} />
+          </a>
+          
+          <a // <--- TROISIÈME CORRECTION ICI
+            href={siteConfig.social.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted hover:text-primary transition-all duration-300 p-3 bg-glass rounded-full border border-glass-border hover:border-primary/50 hover:shadow-[0_0_20px_-4px_var(--color-primary)]"
+          >
+            <FaGithub size={22} />
+          </a>
+        </div>
+
+        {/* Section Inférieure : Droits d'auteur */}
+        <div className="pt-8 border-t border-glass-border text-center text-sm text-muted">
+          <p>&copy; {currentYear} Assane KANE. Tous droits réservés.</p>
+        </div>
+      </Container>
+    </footer>
+  );
+};
+=== ./src/components/layout/Footer/index.ts ===
+// ==========================================
+// 9. src/components/layout/Footer/index.ts
+// ==========================================
+export { Footer } from './Footer';
+
+=== ./src/components/layout/Header/Header.module.css ===
+/* // ==========================================
+// 6. src/components/layout/Header/Header.module.css
+// ========================================== */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.header.scrolled {
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.nav {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #dc3545;
+}
+
+.logoText {
+  display: inline-block;
+}
+
+.desktopNav {
+  display: none;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .desktopNav {
+    display: flex;
+  }
+}
+
+.navLink {
+  color: #374151;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.navLink:hover {
+  color: #dc3545;
+  border-bottom-color: #dc3545;
+}
+
+.mobileMenuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #374151;
+  padding: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .mobileMenuButton {
+    display: none;
+  }
+}
+
+.mobileMenu {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: white;
+}
+
+.mobileNavLink {
+  padding: 0.75rem 0;
+  color: #374151;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.mobileNavLink:last-child {
+  border-bottom: none;
+}
+
+=== ./src/components/layout/Header/Header.tsx ===
+"use client";
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiMenu, FiX, FiMoon, FiSun } from 'react-icons/fi';
+import { useTheme } from 'next-themes';
+import { cn } from '@/lib/utils';
+import { navigationItems } from '@/constants/navigation';
+
+export const Header: React.FC = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Cible de scroll en attente, appliquée seulement une fois l'animation de sortie terminée
+  const pendingScrollTarget = useRef<string | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTarget = (href: string) => {
+    if (href.startsWith('#')) {
+      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.location.href = href;
+    }
+  };
+
+  const handleNavClick = (href: string) => {
+    if (isMobileMenuOpen) {
+      // Menu mobile ouvert : on mémorise la cible, on ferme,
+      // et onExitComplete se chargera de scroller au bon moment
+      pendingScrollTarget.current = href;
+      setIsMobileMenuOpen(false);
+    } else {
+      // Desktop : rien à attendre, on scrolle direct
+      scrollToTarget(href);
+    }
+  };
+
+  const handleMobileToggle = () => {
+    setIsMobileMenuOpen((prev) => {
+      return !prev;
+    });
+  };
+
+  return (
+    <header
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+        (isScrolled || isMobileMenuOpen)
+          ? "bg-background/95 backdrop-blur-lg border-b border-glass-border py-2"
+          : "bg-transparent py-6"
+      )}
+    >
+      <nav className="max-w-7xl mx-auto px-6 flex justify-between items-center h-12 relative">
+        <motion.div
+          className="text-3xl font-black text-primary cursor-pointer tracking-tighter"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+          AK
+        </motion.div>
+
+        <div className="hidden md:flex items-center">
+          {mounted && (
+            <motion.button
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="text-muted hover:text-primary transition-colors duration-300"
+            >
+              {theme === 'dark' ? <FiSun size={20} /> : <FiMoon size={20} />}
+            </motion.button>
+          )}
+
+          <div className="w-px h-5 bg-glass-border mx-6"></div>
+
+          <div className="flex items-center gap-10">
+            {navigationItems.map((item, index) => (
+              <motion.a
+                key={item.href}
+                href={item.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(item.href);
+                }}
+                className="text-sm font-medium text-muted hover:text-foreground transition-colors duration-300"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                {item.name}
+              </motion.a>
+            ))}
+          </div>
+        </div>
+
+        <div className="md:hidden flex items-center gap-6">
+          {mounted && (
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="text-muted hover:text-primary transition-colors"
+            >
+              {theme === 'dark' ? <FiSun size={22} /> : <FiMoon size={22} />}
+            </button>
+          )}
+          <button
+            className="text-foreground hover:text-primary transition-colors"
+            onClick={handleMobileToggle}
+          >
+            {isMobileMenuOpen ? <FiX size={26} /> : <FiMenu size={26} />}
+          </button>
+        </div>
+      </nav>
+
+      <AnimatePresence
+        onExitComplete={() => {
+          // L'animation de fermeture est réellement terminée : on peut scroller
+          if (pendingScrollTarget.current) {
+            scrollToTarget(pendingScrollTarget.current);
+            pendingScrollTarget.current = null;
+          }
+        }}
+      >
+        {isMobileMenuOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden absolute top-full left-0 w-full bg-background/95 backdrop-blur-xl border-b border-glass-border shadow-xl overflow-hidden"
+          >
+            <div className="px-6 py-8 flex flex-col gap-6 items-center">
+              {navigationItems.map((item) => (
+                <a 
+                  key={item.href}
+                  href={item.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(item.href);
+                  }}
+                  className="text-xl font-medium text-muted hover:text-primary transition-colors"
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+};
+=== ./src/components/layout/Header/index.ts ===
+// ==========================================
+// 7. src/components/layout/Header/index.ts
+// ==========================================
+export { Header } from './Header';
+=== ./src/components/layout/Section/index.ts ===
+// ==========================================
+// 4. src/components/layout/Section/index.ts
+// ==========================================
+export { Section } from './Section';
+
+=== ./src/components/layout/Section/SectionBackground.tsx ===
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+
+interface SectionBackgroundProps {
+  glowPosition?: 'left' | 'right' | 'center';
+}
+
+export const SectionBackground: React.FC<SectionBackgroundProps> = ({ glowPosition = 'center' }) => {
+  // Détermine la position de la lueur principale
+  const getPrimaryPosition = () => {
+    switch (glowPosition) {
+      case 'left':
+        return '-left-1/4 top-1/4';
+      case 'right':
+        return '-right-1/4 top-1/4';
+      case 'center':
+      default:
+        return 'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2';
+    }
+  };
+
+  // Détermine la position de la lueur secondaire (pour l'effet de profondeur)
+  const getSecondaryPosition = () => {
+    switch (glowPosition) {
+      case 'left':
+        return 'left-0 bottom-0';
+      case 'right':
+        return 'right-0 bottom-0';
+      case 'center':
+      default:
+        return 'left-1/3 top-1/3';
+    }
+  };
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      
+      {/* Lueur Principale : Grande et asymétrique */}
+      <motion.div
+        className={`absolute ${getPrimaryPosition()} w-[600px] h-[500px] bg-[var(--color-primary)] rounded-[100%] blur-[120px] mix-blend-screen`}
+        animate={{
+          scale: [1, 1.15, 0.95, 1],
+          opacity: [0.05, 0.12, 0.05], // Opacité augmentée pour être bien visible
+          rotate: [0, 10, -5, 0],
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Lueur Secondaire : Plus sombre, crée la texture "fumée" en bougeant différemment */}
+      <motion.div
+        className={`absolute ${getSecondaryPosition()} w-[500px] h-[400px] bg-[#9b1c28] rounded-full blur-[100px] mix-blend-screen`}
+        animate={{
+          x: [-30, 30, -30],
+          y: [30, -30, 30],
+          opacity: [0.03, 0.08, 0.03],
+          scale: [0.9, 1.1, 0.9],
+        }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+      />
+      
+      {/* Grille de fond un peu plus contrastée */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--color-glass-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-glass-border)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_20%,transparent_100%)] opacity-70" />
+    </div>
+  );
+};
+=== ./src/components/layout/Section/Section.tsx ===
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
+import { Container } from '../Container/Container';
+import { SectionBackground } from './SectionBackground';
+
+interface SectionProps {
+  id?: string;
+  children: React.ReactNode;
+  className?: string;
+  containerSize?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  background?: 'default' | 'alternate' | 'gradient';
+  noPadding?: boolean;
+  withGlow?: boolean; // Nouvelle option pour activer/désactiver la lueur
+  glowPosition?: 'left' | 'right' | 'center'; // Position de la lueur
+}
+
+export const Section: React.FC<SectionProps> = ({
+  id,
+  children,
+  className,
+  containerSize = 'xl',
+  background = 'default',
+  noPadding = false,
+  withGlow = true, // Activé par défaut
+  glowPosition = 'center',
+}) => {
+  const backgrounds = {
+    default: 'bg-background',
+    alternate: 'bg-surface',
+    gradient: 'bg-gradient-to-b from-background to-surface',
+  };
+
+  return (
+    <motion.section
+      id={id}
+      className={cn(
+        'relative overflow-hidden', // Ajout de relative et overflow-hidden pour contenir l'arrière-plan
+        backgrounds[background],
+        !noPadding && 'py-24',
+        className,
+        'transition-colors duration-300'
+      )}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6 }}
+    >
+      {/* Ajout du composant d'arrière-plan */}
+      {withGlow && <SectionBackground glowPosition={glowPosition} />}
+
+      {/* Le contenu doit être au-dessus (z-10) */}
+      <div className="relative z-10">
+        <Container size={containerSize}>{children}</Container>
+      </div>
+    </motion.section>
+  );
+};
+=== ./src/components/sections/About/About.tsx ===
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Section } from '@/components/layout/Section/Section';
+import { Card } from '@/components/ui/Card/Card';
+import { FiCode, FiTarget, FiHeart } from 'react-icons/fi';
+
+export const About: React.FC = () => {
+  const highlights = [
+    { icon: <FiCode className="text-3xl" />, title: "Développement Full Stack", description: "Création d'applications web complètes avec React, Next.js, et Spring Boot." },
+    { icon: <FiTarget className="text-3xl" />, title: "Solutions Sur Mesure", description: "Conception de systèmes adaptés aux besoins spécifiques et scalables." },
+    { icon: <FiHeart className="text-3xl" />, title: "Passion & Innovation", description: "Toujours à la recherche des meilleures pratiques et nouvelles technologies." }
+  ];
+
+  return (
+    <Section id="about" background="alternate">
+      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <h2 className="text-5xl font-black text-foreground mb-4 tracking-tight">À Propos</h2>
+        <div className="w-20 h-1.5 bg-primary mb-16 rounded-full"></div>
+        
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="space-y-6">
+            <h3 className="text-3xl font-bold text-foreground">Bonjour, je suis Assane 👋</h3>
+            <p className="text-lg text-muted leading-relaxed">
+              Développeur Full Stack passionné, je transforme des idées en applications web performantes et intuitives. 
+              Actuellement en dernière année d'études en informatique, je me spécialise dans le développement d'applications 
+              modernes avec React, Next.js et Spring Boot.
+            </p>
+            <p className="text-lg text-muted leading-relaxed">
+              Mon objectif est de créer des solutions techniques élégantes qui résolvent de vrais problèmes utilisateurs, 
+              tout en maintenant un code propre et maintenable.
+            </p>
+          </div>
+          
+          <div className="space-y-4">
+            {highlights.map((item, index) => (
+              <motion.div key={index} initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}>
+                <Card className="p-6">
+                  <div className="flex items-start gap-5">
+                    <div className="text-primary mt-1">{item.icon}</div>
+                    <div>
+                      <h4 className="text-xl font-bold text-foreground mb-2">{item.title}</h4>
+                      <p className="text-muted">{item.description}</p>
+                    </div>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    </Section>
+  );
+};
+=== ./src/components/sections/About/index.ts ===
+// ==========================================
+// 2. src/components/sections/About/index.ts
+// ==========================================
+export { About } from './About';
+
+
+
+
+=== ./src/components/sections/Contact/ContactForm.tsx ===
+"use client";
+import React, { useState } from 'react';
+import { useForm } from '@formspree/react';
+import { Input } from '@/components/ui/Input/Input';
+import { Button } from '@/components/ui/Button/Button';
+import { FiSend, FiCheck } from 'react-icons/fi';
+
+export const ContactForm: React.FC = () => {
+  const [state, handleSubmit] = useForm(process.env.NEXT_PUBLIC_FORMSPREE_ID!); // TODO: remplacer par ton ID Formspree
+  // 1. Ajout de 'subject' dans l'état initial
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '', 
+    message: ''
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  if (state.succeeded) {
+    return (
+      <div className="text-center py-12">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
+          <FiCheck className="text-3xl text-primary" />
+        </div>
+        <h3 className="text-2xl font-bold text-foreground mb-2">Message envoyé !</h3>
+        <p className="text-muted">Merci pour votre message. Je vous répondrai bientôt.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      
+      {/* Mise en grille : Nom et Email sur la même ligne sur Desktop */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <Input
+          label="Nom"
+          name="name" // Formspree lira ce 'name'
+          type="text"
+          required
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Votre nom"
+        />
+        
+        <Input
+          label="Email"
+          name="email"
+          type="email"
+          required
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="votre.email@example.com"
+        />
+      </div>
+
+      {/* 2. Ajout du nouveau champ Objet */}
+      <Input
+        label="Objet"
+        name="subject" // Formspree l'identifiera comme "subject"
+        type="text"
+        required
+        value={formData.subject}
+        onChange={handleChange}
+        placeholder="L'objet de votre message"
+      />
+
+      {/* Champ Message */}
+      <div>
+        <label className="block text-sm font-semibold text-foreground mb-2">
+          Message
+        </label>
+        <textarea
+          name="message"
+          required
+          value={formData.message}
+          onChange={handleChange}
+          rows={5}
+          className="w-full px-5 py-3 text-foreground bg-glass border border-glass-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 placeholder:text-muted"
+          placeholder="Comment puis-je vous aider ?"
+        />
+      </div>
+
+      {/* Bouton de soumission */}
+      <Button
+        type="submit"
+        fullWidth
+        isLoading={state.submitting}
+        disabled={state.submitting}
+        className="rounded-xl bg-primary text-white hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(220,53,69,0.2)]"
+      >
+        <FiSend className="mr-2" />
+        Envoyer le message
+      </Button>
+    </form>
+  );
+};
+=== ./src/components/sections/Contact/Contact.tsx ===
+"use client";
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FiMail, FiGithub, FiLinkedin } from 'react-icons/fi';
+import { Section } from '@/components/layout/Section';
+import { Card } from '@/components/ui/Card';
+import { ContactForm } from './ContactForm';
+import { siteConfig } from '@/constants/config';
+
+export const Contact: React.FC = () => {
+  const contactMethods = [
+    //{
+      // icon: <FiMail className="text-2xl" />,
+      // title: "Email",
+      // value: siteConfig.author.email,
+      // link: `mailto:${siteConfig.author.email}`,
+    //},
+    {
+      icon: <FiGithub className="text-2xl" />,
+      title: "GitHub",
+      value: "@Logibuilder",
+      link: siteConfig.social.github,
+    },
+    {
+      icon: <FiLinkedin className="text-2xl" />,
+      title: "LinkedIn",
+      value: "Assane KANE",
+      link: siteConfig.social.linkedin,
+    },
+  ];
+
+  return (
+    <Section id="contact" background="alternate">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <h2 className="text-5xl font-black text-center text-foreground mb-4 tracking-tight">
+          Contact
+        </h2>
+        <div className="w-20 h-1.5 bg-primary mx-auto mb-4 rounded-full" />
+        <p className="text-center text-muted mb-16 max-w-2xl mx-auto">
+          {/* Un projet en tête ? Une question ? N'hésitez pas à me contacter ! */}
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+          {/* Contact Methods */}
+          <div className="space-y-6">
+            <h3 className="text-2xl font-bold text-foreground mb-6">Me contacter</h3>
+            {contactMethods.map((method, index) => (
+              <motion.a
+                key={method.title}
+                href={method.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="block"
+              >
+                <Card hoverable className="p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="text-primary">{method.icon}</div>
+                    <div>
+                      <p className="font-semibold text-foreground">{method.title}</p>
+                      <p className="text-sm text-muted">{method.value}</p>
+                    </div>
+                  </div>
+                </Card>
+              </motion.a>
+            ))}
+          </div>
+
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <Card className="p-8">
+              <h3 className="text-2xl font-bold text-foreground mb-6">Envoyez-moi un message</h3>
+              <ContactForm />
+            </Card>
+          </motion.div>
+        </div>
+      </motion.div>
+    </Section>
+  );
+};
+=== ./src/components/sections/Contact/index.ts ===
+// ==========================================
+// 4. src/components/sections/Contact/index.ts
+// ==========================================
+export { Contact } from './Contact';
+export { ContactForm } from './ContactForm';
+=== ./src/components/sections/Hero/HeroBackground.tsx ===
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+
+export const HeroBackground: React.FC = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Lueur rouge centrale (effet fumée/brouillard dynamique) */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--color-primary)] opacity-20 rounded-full blur-[120px]"
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.15, 0.25, 0.15],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      
+      {/* Grille de fond qui s'adapte au thème clair/sombre */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--color-glass-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-glass-border)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_10%,transparent_100%)]" />
+    </div>
+  );
+};
+=== ./src/components/sections/Hero/Hero.module.css ===
+/* // ==========================================
+// 7. src/components/sections/Hero/Hero.module.css
+// ========================================== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+=== ./src/components/sections/Hero/Hero.tsx ===
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FiGithub, FiLinkedin, FiArrowDown, FiDownload } from 'react-icons/fi';
+import { Button } from '@/components/ui/Button/Button';
+import { HeroBackground } from './HeroBackground';
+import { siteConfig } from '@/constants/config';
+import { withBasePath } from '@/lib/paths';
+
+export const Hero: React.FC = () => {
+  const scrollToSection = (id: string) => {
+    document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <section id="hero" className="relative min-h-screen flex items-center overflow-hidden bg-background transition-colors duration-300">
+      <HeroBackground />
+      
+      {/* Ajout d'un padding-top plus important sur mobile (pt-32) pour éviter que le Header ne cache la photo */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-32 pb-20 md:pt-20 md:pb-0">
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-24 items-center">
+          
+          {/* ========================================== */}
+          {/* COLONNE DE GAUCHE : Photo + Nom              */}
+          {/* ========================================== */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex flex-col items-center md:items-start"
+          >
+            {/* Photo de profil */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="relative mb-6 md:mb-8"
+            >
+              {/* Lueur rouge d'arrière-plan agrandie */}
+              <div className="absolute inset-0 bg-primary/30 blur-3xl rounded-full z-0 translate-y-4 scale-110"></div>
+              
+              {/* Conteneur de l'image agrandi */}
+              <div className="relative z-10 w-48 h-48 sm:w-56 sm:h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-[3px] border-glass-border bg-glass backdrop-blur-md shadow-2xl">
+                <img
+                  src={withBasePath(siteConfig.photo_profile)}
+                  alt="Assane KANE"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </motion.div>
+
+            {/* Nom */}
+            <h1 className="text-6xl md:text-8xl lg:text-[9rem] font-black text-foreground leading-[0.9] tracking-tighter uppercase text-center md:text-left">
+              ASSANE
+              <br />
+              KANE
+            </h1>
+          </motion.div>
+
+          {/* ========================================== */}
+          {/* COLONNE DE DROITE : Contenu                  */}
+          {/* ========================================== */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="flex flex-col items-center md:items-start text-center md:text-left mt-2 md:mt-0"
+          >
+            {/* Badge de disponibilité */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-glass backdrop-blur-md border border-glass-border rounded-full mb-6 md:mb-8">
+              <span className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_var(--color-primary)]" />
+              <span className="text-sm font-medium text-foreground">Disponible pour une alternance</span>
+            </div>
+
+            {/* Titre du poste */}
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-4 md:mb-6 leading-tight">
+              Développeur <br className="hidden md:block" />
+              Full Stack
+            </h2>
+
+            {/* Description */}
+            <p className="text-lg text-muted mb-8 md:mb-10 max-w-md leading-relaxed">
+              Un développeur Full Stack passionné par l'innovation et les technologies modernes, 
+              basé en Région Parisienne.
+            </p>
+
+            {/* Boutons d'action et Réseaux Sociaux */}
+            {/* Boutons d'action et Réseaux Sociaux */}
+            <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 md:gap-6 w-full sm:w-auto">
+              
+              {/* Bouton CV (Action Principale) */}
+              <Button
+                size="lg"
+                onClick={() => window.open(withBasePath('/Assane_KANE_MON_CV.pdf'), '_blank')}
+                className="rounded-full bg-primary text-white hover:bg-primary/90 px-8 transition-all w-full sm:w-auto shadow-[0_0_20px_rgba(220,53,69,0.3)] flex items-center justify-center gap-2"
+              >
+                <FiDownload size={18} />
+                Voir mon CV
+              </Button>
+
+              {/* Bouton Projets (Action Secondaire) */}
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => scrollToSection('#projects')}
+                className="rounded-full border border-primary text-primary hover:bg-primary hover:text-white px-8 transition-all w-full sm:w-auto"
+              >
+                Voir Mes Projets
+              </Button>
+
+              {/* Réseaux sociaux */}
+              <div className="flex gap-4 mt-2 sm:mt-0">
+                {[
+                  { icon: <FiGithub size={22} />, href: siteConfig.social.github },
+                  { icon: <FiLinkedin size={22} />, href: siteConfig.social.linkedin },
+                ].map((social, i) => (
+                  <motion.a
+                    key={i}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -4, scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-12 h-12 flex items-center justify-center rounded-full bg-glass border border-glass-border text-primary hover:bg-primary hover:text-white transition-colors duration-300 shadow-sm"
+                  >
+                    {social.icon}
+                  </motion.a>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Indicateur de défilement (Caché sur les très petits écrans pour gagner de la place) */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden sm:block"
+      >
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-2 text-muted cursor-pointer hover:text-primary transition-colors"
+          onClick={() => scrollToSection('#about')}
+        >
+          <FiArrowDown className="text-2xl" />
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+};
+=== ./src/components/sections/Hero/index.ts ===
+// ==========================================
+// 8. src/components/sections/Hero/index.ts
+// ==========================================
+export { Hero } from './Hero';
+export { HeroBackground } from './HeroBackground';
+=== ./src/components/sections/Projects/index.ts ===
+// ==========================================
+// 8. src/components/sections/Projects/index.ts
+// ==========================================
+export { Projects } from './Projects';
+export { ProjectCard } from './ProjectCard';
+
+=== ./src/components/sections/Projects/ProjectCard.tsx ===
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FiGithub, FiExternalLink, FiFileText } from 'react-icons/fi';
+import { Card } from '@/components/ui/Card/Card';
+import { Badge } from '@/components/ui/Badge/Badge';
+import { Button } from '@/components/ui/Button/Button';
+import { Project } from '@/types';
+
+interface ProjectCardProps {
+  project: Project;
+  onClick: () => void;
+}
+
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
+  return (
+    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+      <Card hoverable className="h-full flex flex-col group" onClick={onClick}>
+        {/* Image avec Overlay */}
+        <div className="relative h-60 bg-surface overflow-hidden border-b border-glass-border">
+          <div className="absolute inset-0 bg-background/20 group-hover:bg-transparent transition-colors z-10" />
+          <img src={project.image} alt={project.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        </div>
+        
+        {/* Contenu */}
+        <div className="p-8 flex-1 flex flex-col">
+          <h3 className="text-2xl font-bold text-foreground mb-3">{project.title}</h3>
+          <p className="text-muted mb-6 line-clamp-2 leading-relaxed">{project.description}</p>
+          
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {project.tags.slice(0, 3).map((tag) => (
+              <Badge key={tag}>{tag}</Badge>
+            ))}
+            {project.tags.length > 3 && (
+              <Badge>+{project.tags.length - 3}</Badge>
+            )}
+          </div>
+          
+          {/* Liens - Utilisation de textes simples pour le design moderne */}
+          <div className="flex gap-4 mt-auto pt-4 border-t border-glass-border">
+            {project.links.github && (
+              <button onClick={(e) => { e.stopPropagation(); window.open(project.links.github!, '_blank'); }} className="flex items-center gap-2 text-sm font-medium text-muted hover:text-primary transition-colors">
+                <FiGithub /> Code
+              </button>
+            )}
+            {project.links.demo && (
+              <button onClick={(e) => { e.stopPropagation(); window.open(project.links.demo!, '_blank'); }} className="flex items-center gap-2 text-sm font-medium text-muted hover:text-primary transition-colors">
+                <FiExternalLink /> Demo
+              </button>
+            )}
+            {project.links.documentation && (
+              <button onClick={(e) => { e.stopPropagation(); window.open(project.links.documentation!, '_blank'); }} className="flex items-center gap-2 text-sm font-medium text-muted hover:text-primary transition-colors">
+                <FiFileText /> Doc
+              </button>
+            )}
+          </div>
+        </div>
+      </Card>
+    </motion.div>
+  );
+};
+=== ./src/components/sections/Projects/ProjectModal.tsx ===
+"use client";
+
+import React from 'react';
+import { FiGithub, FiExternalLink, FiFileText } from 'react-icons/fi';
+import { Modal } from '@/components/ui/Modal';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Project } from '@/types';
+
+interface ProjectModalProps {
+  project: Project;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const ProjectModal: React.FC<ProjectModalProps> = ({ 
+  project, 
+  isOpen, 
+  onClose 
+}) => {
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+      <div className="space-y-6">
+        {/* Header Image */}
+        <div className="relative h-64 -m-6 mb-6 bg-surface overflow-hidden">
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Title & Status */}
+        <div>
+          <div className="flex items-start justify-between mb-4">
+            <h2 className="text-3xl font-bold text-foreground">{project.title}</h2>
+            <Badge variant={
+              project.status === 'completed' ? 'success' :
+              project.status === 'in-progress' ? 'warning' : 'info'
+            }>
+              {project.status === 'completed' ? 'Terminé' :
+               project.status === 'in-progress' ? 'En cours' : 'Prévu'}
+            </Badge>
+          </div>
+          <p className="text-muted leading-relaxed">{project.longDescription}</p>
+        </div>
+
+        {/* Technologies */}
+        <div>
+          <h3 className="font-semibold text-lg text-foreground mb-3">Technologies utilisées</h3>
+          <div className="space-y-3">
+            {project.technologies.frontend.length > 0 && (
+              <div>
+                <p className="text-sm font-medium text-muted mb-2">Frontend</p>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.frontend.map((tech) => (
+                    <Badge key={tech}>{tech}</Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+            {project.technologies.backend.length > 0 && (
+              <div>
+                <p className="text-sm font-medium text-muted mb-2">Backend</p>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.backend.map((tech) => (
+                    <Badge key={tech}>{tech}</Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+            {project.technologies.tools.length > 0 && (
+              <div>
+                <p className="text-sm font-medium text-muted mb-2">Outils</p>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.tools.map((tech) => (
+                    <Badge key={tech} variant="info">{tech}</Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Features */}
+        {project.features.length > 0 && (
+          <div>
+            <h3 className="font-semibold text-lg text-foreground mb-3">Fonctionnalités principales</h3>
+            <ul className="space-y-2">
+              {project.features.map((feature, index) => (
+                <li key={index} className="flex items-start gap-2">
+                  <span className="text-primary mt-1">✓</span>
+                  <span className="text-muted">{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Links */}
+        <div className="flex flex-wrap gap-3 pt-4 border-t border-glass-border">
+          {project.links.github && (
+            <Button
+              variant="outline"
+              leftIcon={<FiGithub />}
+              onClick={() => window.open(project.links.github!, '_blank')}
+            >
+              Voir le code
+            </Button>
+          )}
+          {project.links.demo && (
+            <Button
+              leftIcon={<FiExternalLink />}
+              onClick={() => window.open(project.links.demo!, '_blank')}
+            >
+              Voir la démo
+            </Button>
+          )}
+          {project.links.documentation && (
+            <Button
+              variant="outline"
+              leftIcon={<FiFileText />}
+              onClick={() => window.open(project.links.documentation!, '_blank')}
+            >
+              Documentation
+            </Button>
+          )}
+        </div>
+      </div>
+    </Modal>
+  );
+};
+=== ./src/components/sections/Projects/Projects.tsx ===
+// ==========================================
+// 7. src/components/sections/Projects/Projects.tsx
+// ==========================================
+"use client";
+
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Section } from '@/components/layout/Section';
+import { ProjectCard } from './ProjectCard';
+import { ProjectModal } from './ProjectModal';
+import { projects } from '@/data/projects';
+import { Project } from '@/types';
+
+export const Projects: React.FC = () => {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  return (
+    <>
+      <Section id="projects" background="gradient">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="text-4xl font-bold text-center mb-4">Projets</h2>
+          <div className="w-20 h-1 bg-red-500 mx-auto mb-4"></div>
+          <p className="text-center text-gray-600 mb-16 max-w-2xl mx-auto">
+            Découvrez mes réalisations récentes, du développement web full-stack 
+            aux applications complexes avec gestion de données.
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project, index) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <ProjectCard
+                  project={project}
+                  onClick={() => setSelectedProject(project)}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </Section>
+
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          isOpen={!!selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
+    </>
+  );
+};
+=== ./src/components/sections/Skills/index.ts ===
+// ==========================================
+// 5. src/components/sections/Skills/index.ts
+// ==========================================
+export { Skills } from './Skills';
+export { SkillCard } from './SkillCard';
+=== ./src/components/sections/Skills/SkillCard.tsx ===
+"use client";
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Card } from '@/components/ui/Card';
+
+interface SkillCardProps {
+  name: string;
+  icon: React.ReactNode;
+  color: string;
+  level: number;
+}
+
+export const SkillCard: React.FC<SkillCardProps> = ({ 
+  name, 
+  icon, 
+  color, 
+  level 
+}) => {
+  return (
+    <motion.div whileHover={{ y: -8 }}>
+      <Card className="p-6 text-center h-full">
+        <div 
+          className="text-5xl mb-4 flex justify-center"
+          style={{ color }}
+        >
+          {icon}
+        </div>
+        <h4 className="font-semibold text-foreground mb-3">{name}</h4>
+
+        {/* Level bar */}
+        <div className="w-full bg-glass border border-glass-border rounded-full h-2 overflow-hidden">
+          <motion.div
+            className="h-full rounded-full"
+            style={{ backgroundColor: color }}
+            initial={{ width: 0 }}
+            whileInView={{ width: `${(level / 5) * 100}%` }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.2 }}
+          />
+        </div>
+        <p className="text-xs text-muted mt-2">{level}/5</p>
+      </Card>
+    </motion.div>
+  );
+};
+=== ./src/components/sections/Skills/Skills.tsx ===
+"use client";
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Section } from '@/components/layout/Section';
+import { SkillCard } from './SkillCard';
+import { skillCategories } from '@/data/skills';
+
+export const Skills: React.FC = () => {
+  return (
+    <Section id="skills" background="default">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <h2 className="text-5xl font-black text-center text-foreground mb-4 tracking-tight">
+          Compétences
+        </h2>
+        <div className="w-20 h-1.5 bg-primary mx-auto mb-16 rounded-full" />
+
+        <div className="space-y-16">
+          {skillCategories.map((category, categoryIndex) => (
+            <motion.div
+              key={category.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: categoryIndex * 0.1 }}
+            >
+              <h3 className="text-2xl font-bold text-center text-foreground mb-8">
+                {category.title}
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {category.skills.map((skill, index) => (
+                  <motion.div
+                    key={skill.name}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <SkillCard {...skill} />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </Section>
+  );
+};
+=== ./src/components/ui/Badge/Badge.tsx ===
+"use client";
+import React from 'react';
+import { cn } from '@/lib/utils';
+
+export type BadgeVariant = 'default' | 'success' | 'warning' | 'info';
+export type BadgeSize = 'sm' | 'md';
+
+interface BadgeProps {
+  children: React.ReactNode;
+  className?: string;
+  variant?: BadgeVariant;
+  size?: BadgeSize;
+}
+
+const variantStyles: Record<BadgeVariant, string> = {
+  default: 'bg-primary/10 text-primary border-primary/20',
+  success: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
+  warning: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+  info: 'bg-sky-500/10 text-sky-500 border-sky-500/20',
+};
+
+const sizeStyles: Record<BadgeSize, string> = {
+  sm: 'px-2 py-0.5 text-[10px]',
+  md: 'px-3 py-1 text-xs',
+};
+
+export const Badge: React.FC<BadgeProps> = ({ 
+  children, 
+  className, 
+  variant = 'default',
+  size = 'md',
+}) => {
+  return (
+    <span className={cn(
+      "inline-flex items-center rounded-full font-semibold tracking-wider uppercase border",
+      variantStyles[variant],
+      sizeStyles[size],
+      className
+    )}>
+      {children}
+    </span>
+  );
+};
+=== ./src/components/ui/Badge/index.ts ===
+// ==========================================
+// 8. src/components/ui/Badge/index.ts
+// ==========================================
+export { Badge } from './Badge';
+export type { BadgeVariant, BadgeSize } from './Badge';
+=== ./src/components/ui/Button/Button.module.css ===
+/*
+// ==========================================
+// 3. src/components/ui/Button/Button.module.css
+// ==========================================
+*/
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Variants */
+.primary {
+  background-color: #dc3545;
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(220, 53, 69, 0.2);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: #c82333;
+  box-shadow: 0 10px 15px -3px rgba(220, 53, 69, 0.3);
+}
+
+.secondary {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: #e5e7eb;
+}
+
+.outline {
+  background-color: transparent;
+  color: #dc3545;
+  border: 2px solid #dc3545;
+}
+
+.outline:hover:not(:disabled) {
+  background-color: rgba(220, 53, 69, 0.05);
+}
+
+.ghost {
+  background-color: transparent;
+  color: #6b7280;
+}
+
+.ghost:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+/* Sizes */
+.sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.md {
+  padding: 0.625rem 1rem;
+  font-size: 1rem;
+}
+
+.lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+}
+=== ./src/components/ui/Button/Button.tsx ===
+/* ==========================================
+// 2. src/components/ui/Button/Button.tsx
+// ==========================================
+*/
+"use client";
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FiLoader } from 'react-icons/fi';
+import { cn } from '@/lib/utils';
+import { ButtonProps } from './Button.types';
+import styles from './Button.module.css';
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      children,
+      variant = 'primary',
+      size = 'md',
+      isLoading = false,
+      leftIcon,
+      rightIcon,
+      fullWidth = false,
+      className,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
+    const isDisabled = disabled || isLoading;
+
+    return (
+      <motion.button
+        ref={ref}
+        className={cn(
+          styles.button,
+          styles[variant],
+          styles[size],
+          fullWidth && styles.fullWidth,
+          className
+        )}
+        disabled={isDisabled}
+        whileHover={!isDisabled ? { scale: 1.02 } : {}}
+        whileTap={!isDisabled ? { scale: 0.98 } : {}}
+        {...props}
+      >
+        {isLoading ? (
+          <FiLoader className={styles.spinner} />
+        ) : (
+          <>
+            {leftIcon && <span className={styles.icon}>{leftIcon}</span>}
+            {children}
+            {rightIcon && <span className={styles.icon}>{rightIcon}</span>}
+          </>
+        )}
+      </motion.button>
+    );
+  }
+);
+
+Button.displayName = 'Button';
+=== ./src/components/ui/Button/Button.types.ts ===
+import { HTMLMotionProps } from 'framer-motion';
+
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
+export type ButtonSize = 'sm' | 'md' | 'lg';
+
+export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  isLoading?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  fullWidth?: boolean;
+  children?: React.ReactNode;
+}
+=== ./src/components/ui/Button/index.ts ===
+// ==========================================
+// 4. src/components/ui/Button/index.ts
+// ==========================================
+export { Button } from './Button';
+export type { ButtonProps, ButtonVariant, ButtonSize } from './Button.types';
+
+=== ./src/components/ui/Card/Card.tsx ===
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
+
+interface CardProps {
+  children: React.ReactNode;
+  className?: string;
+  hoverable?: boolean;
+  onClick?: () => void;
+}
+
+export const Card: React.FC<CardProps> = ({ children, className, hoverable = false, onClick }) => {
+  return (
+    <motion.div
+      className={cn(
+        "bg-glass backdrop-blur-md rounded-3xl border border-glass-border overflow-hidden",
+        hoverable && "cursor-pointer transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(220,53,69,0.1)]",
+        className
+      )}
+      onClick={onClick}
+      whileHover={hoverable ? { y: -4 } : {}}
+      transition={{ duration: 0.2 }}
+    >
+      {children}
+    </motion.div>
+  );
+};
+=== ./src/components/ui/Card/index.ts ===
+// ==========================================
+// 6. src/components/ui/Card/index.ts
+// ==========================================
+export { Card } from './Card';
+=== ./src/components/ui/Input/index.ts ===
+// ==========================================
+// 12. src/components/ui/Input/index.ts
+// ==========================================
+export { Input } from './Input';
+=== ./src/components/ui/Input/Input.tsx ===
+"use client";
+import React from 'react';
+import { cn } from '@/lib/utils';
+
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+}
+
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ label, error, className, ...props }, ref) => {
+    return (
+      <div className="w-full">
+        {label && <label className="block text-sm font-semibold text-foreground mb-2">{label}</label>}
+        <input
+          ref={ref}
+          className={cn(
+            "w-full px-5 py-3 text-foreground bg-glass border border-glass-border rounded-xl",
+            "focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary",
+            "transition-all duration-200 placeholder:text-muted",
+            error ? "border-primary" : "",
+            className
+          )}
+          {...props}
+        />
+      </div>
+    );
+  }
+);
+Input.displayName = 'Input';
+=== ./src/components/ui/Modal/index.ts ===
+// ==========================================
+// 10. src/components/ui/Modal/index.ts
+// ==========================================
+export { Modal } from './Modal';
+=== ./src/components/ui/Modal/Modal.tsx ===
+"use client";
+
+import React, { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiX } from 'react-icons/fi';
+import { cn } from '@/lib/utils';
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+  title?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  className?: string;
+}
+
+export const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+  title,
+  size = 'md',
+  className
+}) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  const sizes = {
+    sm: 'max-w-md',
+    md: 'max-w-2xl',
+    lg: 'max-w-4xl',
+    xl: 'max-w-6xl',
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0, y: 10 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 10 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className={cn(
+              "relative bg-surface/95 backdrop-blur-xl border border-glass-border rounded-3xl shadow-2xl w-full max-h-[90vh] overflow-hidden flex flex-col",
+              sizes[size],
+              className
+            )}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {title && (
+              <div className="flex items-center justify-between p-6 border-b border-glass-border">
+                <h2 className="text-2xl font-bold text-foreground">{title}</h2>
+                <button
+                  onClick={onClose}
+                  className="p-2 rounded-full text-muted hover:text-primary hover:bg-glass transition-colors"
+                >
+                  <FiX size={24} />
+                </button>
+              </div>
+            )}
+
+            <div className="flex-1 overflow-y-auto p-6">
+              {children}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+=== ./src/constants/config.ts ===
+// ==========================================
+// 3. src/constants/config.ts
+// ==========================================
+export const siteConfig = {
+  name: "Assane KANE",
+  photo_profile: "/avatar_cv.jpg",
+  title: "Assane KANE | Développeur logiciel",
+  description: "Portfolio de Assane KANE - Développeur Full Stack passionné par l'innovation",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://assane-kane.com",
+  
+  author: {
+    name: "Assane KANE",
+    email: "contact@assane-kane.com",
+    github: "https://github.com/Logibuilder",
+    linkedin: "https://www.linkedin.com/in/assane-kane-10bb19267/",
+  },
+  
+  social: {
+    github: "https://github.com/Logibuilder",
+    linkedin: "https://www.linkedin.com/in/assane-kane-10bb19267/",
+  },
+  
+  features: {
+    darkMode: true,
+    analytics: process.env.NODE_ENV === 'production',
+    animations: true,
+  },
+} as const;
+=== ./src/constants/navigation.ts ===
+// ==========================================
+// 4. src/constants/navigation.ts
+// ==========================================
+import { NavItem } from '@/types';
+
+export const navigationItems: NavItem[] = [
+  {
+    name: "À propos",
+    href: "#hero",
+    icon: "user",
+  },
+  {
+    name: "Compétences",
+    href: "#skills",
+    icon: "code",
+  },
+  {
+    name: "Projets",
+    href: "#projects",
+    icon: "folder",
+  },
+  {
+    name: "Contact",
+    href: "#contact",
+    icon: "mail",
+  },
+];
+
+=== ./src/constants/theme.ts ===
+// ==========================================
+// 5. src/constants/theme.ts
+// ==========================================
+export const theme = {
+  colors: {
+    primary: {
+      50: '#fff5f5',
+      100: '#fed7d7',
+      200: '#feb2b2',
+      300: '#fc8181',
+      400: '#f56565',
+      500: '#dc3545', // Ton rouge principal
+      600: '#c82333',
+      700: '#a71d2a',
+      800: '#742a2a',
+      900: '#63171b',
+    },
+    gray: {
+      50: '#f9fafb',
+      100: '#f3f4f6',
+      200: '#e5e7eb',
+      300: '#d1d5db',
+      400: '#9ca3af',
+      500: '#6b7280',
+      600: '#4b5563',
+      700: '#374151',
+      800: '#1f2937',
+      900: '#111827',
+    },
+  },
+  
+  spacing: {
+    xs: '0.25rem',
+    sm: '0.5rem',
+    md: '1rem',
+    lg: '1.5rem',
+    xl: '2rem',
+    '2xl': '3rem',
+    '3xl': '4rem',
+  },
+  
+  borderRadius: {
+    sm: '0.375rem',
+    md: '0.5rem',
+    lg: '0.75rem',
+    xl: '1rem',
+    '2xl': '1.5rem',
+    full: '9999px',
+  },
+  
+  shadows: {
+    sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+    md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+    '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+  },
+} as const;
+=== ./src/data/experience.ts ===
+
+=== ./src/data/projects.ts ===
+// ==========================================
+// 6. src/data/projects.ts
+// ==========================================
+import { Project } from '@/types';
+import { withBasePath } from '@/lib/paths';
+
+export const projects: Project[] = [
+  {
+    id: 1,
+    title: "Gestion emplois du temps",
+    slug: "gestion-emplois-du-temps",
+    description: "Application web de gestion d'emplois du temps pour établissements scolaires avec contraintes de disponibilité",
+    longDescription: `
+      Système complet de planification et gestion des emplois du temps pour établissements scolaires.
+      L'application prend en compte les disponibilités des enseignants, les salles disponibles,
+      et les types de séances (CM, TD, TP) pour générer des plannings optimisés.
+    `,
+    image: withBasePath("/images/imagesEDT/pageConnec.png"),
+    images: [
+      withBasePath("/images/imagesEDT/pageConnec.png"),
+      withBasePath("/images/imagesEDT/dashboard.png"),
+    ],
+    tags: ["Java", "Spring Boot", "PostgreSQL", "React", "FullCalendar"],
+    technologies: {
+      frontend: ["React", "FullCalendar", "Bootstrap"],
+      backend: ["Java", "Spring Boot", "PostgreSQL"],
+      tools: ["Git", "Postman", "Maven"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/gestionEmploiDuTemps",
+      demo: null,
+      documentation: withBasePath("/description/gestionEDT.pdf"),
+    },
+    features: [
+      "Gestion des contraintes de disponibilité des enseignants",
+      "Visualisation calendrier interactive avec FullCalendar",
+      "Export PDF des plannings générés",
+      "Système de notifications pour les changements",
+      "Interface d'administration complète",
+    ],
+    date: "2024-09",
+    status: "completed",
+  },
+  {
+    id: 2,
+    title: "Portfolio Moderne",
+    slug: "portfolio-moderne",
+    description: "Portfolio personnel avec Next.js, TypeScript et animations avancées",
+    longDescription: `
+      Portfolio personnel développé avec les dernières technologies web.
+      Architecture modulaire avec composants réutilisables, système de design cohérent,
+      et optimisations pour les performances et le SEO.
+    `,
+    image: withBasePath("/images/portfolio_.png"),
+    tags: ["Next.js", "TypeScript", "Framer Motion", "Tailwind CSS"],
+    technologies: {
+      frontend: ["Next.js 15", "TypeScript", "Framer Motion", "Tailwind CSS"],
+      backend: [],
+      tools: ["Git", "Vercel"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/assane.kane",
+      demo: "https://assane-kane.vercel.app",
+      documentation: withBasePath("/description/portfolio.pdf"),
+    },
+    features: [
+      "Architecture Next.js 15 avec App Router",
+      "Composants TypeScript modulaires et réutilisables",
+      "Animations avancées avec Framer Motion",
+      "Mode sombre/clair avec persistance",
+      "Optimisation SEO complète",
+    ],
+    date: "2024-12",
+    status: "in-progress",
+  },
+  {
+    id: 3,
+    title: "Réseau Tisséo",
+    slug: "reseau-tisseo",
+    description: "Application interactive explorant le réseau de transport toulousain en temps réel",
+    longDescription: `
+      Application web permettant de visualiser les lignes et arrêts du réseau Tisséo.
+      Utilise l'API Open Data Tisséo pour récupérer les informations en temps réel.
+    `,
+    image: withBasePath("/images/logo_tisseo.jpeg"),
+    tags: ["Svelte", "API REST", "Bootstrap", "Git"],
+    technologies: {
+      frontend: ["Svelte", "Bootstrap"],
+      backend: ["API Tisséo"],
+      tools: ["Git"],
+    },
+    links: {
+      github: "https://github.com/votre-projet-3",
+      demo: null,
+      documentation: withBasePath("/description/app_tisseo.pdf"),
+    },
+    features: [
+      "Affichage dynamique des lignes de transport",
+      "Sélection d'une ligne pour voir ses arrêts",
+      "Indication visuelle de la ligne sélectionnée",
+      "Interface responsive",
+    ],
+    date: "2024-06",
+    status: "completed",
+  },
+  {
+    id: 4,
+    title: "League Of Stones",
+    slug: "league-of-stones",
+    description: "Jeu de cartes stratégique multijoueur combinant LoL et Hearthstone",
+    longDescription: `
+      Jeu de cartes stratégique en temps réel combinant les univers de League of Legends et Hearthstone.
+      Système de matchmaking, gestion de decks et parties multijoueurs via WebSocket.
+    `,
+    image: withBasePath("/images/leagueofstone.png"),
+    tags: ["React", "Node.js", "MongoDB", "Socket.io"],
+    technologies: {
+      frontend: ["React", "CSS Modules"],
+      backend: ["Node.js", "Express", "MongoDB"],
+      tools: ["Socket.io", "Git"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/LeaguesOfStones",
+      demo: null,
+      documentation: withBasePath("/description/los-demo.pdf"),
+    },
+    features: [
+      "Système de combat tour par tour en temps réel",
+      "Matchmaking automatique des joueurs",
+      "Gestion de decks et collection de cartes",
+      "Communication WebSocket bidirectionnelle",
+      "Système de classement",
+    ],
+    date: "2024-03",
+    status: "completed",
+  },
+  {
+    id: 5,
+    title: "DreamPark",
+    slug: "dream-park",
+    description: "Système de gestion automatisée et intelligente de stationnement multiniveaux",
+    longDescription: `
+      Application modulaire développée en Python suivant l'architecture MVC pour gérer les infrastructures de stationnement.
+      Le système orchestre l'accès automatisé des véhicules, l'allocation dynamique des emplacements selon les dimensions, 
+      la facturation via des bornes, et l'intégration de services annexes (entretien, livraison par voiturier).
+    `,
+    image: withBasePath("/images/dream_parc_avatar.png"),
+    images: [
+      withBasePath("/images/dream_parc_avatar.png")
+    ],
+    tags: ["Python", "MVC", "Unittest", "CLI"],
+    technologies: {
+      frontend: ["CLI (Ligne de commande)"],
+      backend: ["Python 3.11/3.12"],
+      tools: ["Unittest", "MagicMock", "Git"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/dreamPark",
+      demo: null,
+      documentation: null,
+    },
+    features: [
+      "Architecture Modèle-Vue-Contrôleur (MVC) stricte",
+      "Algorithmique de placement optimisée selon les dimensions du véhicule",
+      "Contrôle d'accès et facturation via bornes automatisées",
+      "Simulation d'acheminement automatisé (Téléporteur)",
+      "Suite de tests unitaires complète avec isolation par Mocks",
+    ],
+    date: "2026-07",
+    status: "completed",
+  },
+  {
+    id: 6,
+    title: "Catiches (ICARE)",
+    slug: "catiches-icare",
+    description: "Plateforme IoT de gestion de passerelles et de capteurs connectés en temps réel",
+    longDescription: `
+      Application full-stack de supervision et de gestion d'objets connectés (passerelles et capteurs).
+      Le projet intègre un back-end robuste (Python/FastAPI) gérant l'authentification sécurisée, les WebSockets et les bases de données,
+      associé à un front-end moderne (React, TypeScript, Tailwind CSS / Shadcn UI) pour le tableau de bord administrateur et utilisateur.
+    `,
+    image: withBasePath("/images/catiches_avatar.png"), // Ajuste le chemin de l'image si besoin
+    images: [
+      withBasePath("/images/catiches_avatar.png")
+    ],
+    tags: ["Python", "FastAPI", "React", "TypeScript", "Docker", "WebSockets"],
+    technologies: {
+      frontend: ["React", "TypeScript", "Tailwind CSS", "Vite"],
+      backend: ["Python", "FastAPI", "PostgreSQL"],
+      tools: ["Docker", "Docker Compose", "Git", "Pytest"],
+    },
+    links: {//
+      github: null,  
+      demo: "http://172.28.101.33/login",
+      documentation: null,
+    },
+    features: [
+      "Gestion centralisée des passerelles (gateways) et des capteurs (sensors)",
+      "Communication en temps réel via WebSockets",
+      "Tableau de bord administrateur et gestion des rôles utilisateurs",
+      "Authentification sécurisée et chiffrement",
+      "Conteneurisation complète avec Docker et Docker Compose",
+    ],
+    date: "2026-06",
+    status: "completed",
+  },
+  {
+    id: 7,
+    title: "Serveur FTP Multi-Clients",
+    slug: "ftp-server",
+    description: "Implémentation d'un serveur FTP en Java gérant les connexions simultanées via threads",
+    longDescription: `
+      Développement complet d'un serveur FTP respectant les standards du protocole. 
+      L'application gère les authentifications, la navigation dans les répertoires, et 
+      les transferts de fichiers en mode actif et passif. L'architecture repose sur 
+      le multithreading pour supporter plusieurs clients simultanément.
+    `,
+    image: withBasePath("/images/ftp_server_avatar.png"),
+    images: [
+      withBasePath("/images/ftp_server_avatar.png")
+    ],
+    tags: ["Java", "Réseau", "Multithreading", "Protocoles"],
+    technologies: {
+      frontend: ["Client FTP standard"],
+      backend: ["Java", "Sockets", "Threads"],
+      tools: ["Maven", "Git", "UML"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/ftp_server",
+      demo: "https://github.com/Logibuilder/ftp_server/blob/main/doc/demo_ftp_server.mp4",
+      documentation: null,
+    },
+    features: [
+      "Gestion complète des commandes FTP (USER, PASS, LIST, RETR, STOR, etc.)",
+      "Architecture multithread pour la concurrence des connexions",
+      "Support des modes de transfert de données actif (PORT) et passif (PASV)",
+      "Gestion de système de fichiers virtuel pour la navigation",
+    ],
+    date: "2026-02",
+    status: "completed",
+  },
+  {
+    id: 8,
+    title: "Client FTP",
+    slug: "ftp-client",
+    description: "Application client FTP en ligne de commande développée en Java permettant de naviguer et d'explorer l'arborescence d'un serveur distant.",
+    longDescription: `
+      Logiciel client FTP en ligne de commande développé en Java. Il permet de se connecter à un serveur distant, de naviguer dans les dossiers et de lister les fichiers. 
+      Sa fonctionnalité principale réside dans l'exploration récursive de l'arborescence du serveur selon deux algorithmes : le parcours en profondeur (DFS) et le parcours en largeur (BFS). 
+      Il intègre un mécanisme de reconnexion automatique en cas de panne réseau et permet d'exporter la structure explorée au format JSON.
+    `,
+    image: withBasePath("/images/ftp_client_avatar.png"),
+    images: [
+      withBasePath("/images/ftp_client_avatar.png")
+    ],
+    tags: ["Java", "Réseau", "Algorithmique", "CLI"],
+    technologies: {
+      frontend: ["CLI (Ligne de commande)"],
+      backend: ["Java", "Sockets", "Gson"],
+      tools: ["Maven", "Git", "JUnit 5", "Mockito"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/ftpclient",
+      demo: "https://github.com/Logibuilder/ftpclient/blob/main/demo-client-ftp.mkv",
+      documentation:null,
+    },
+    features: [
+      "Connexion et authentification au serveur FTP avec gestion du mode passif (PASV)",
+      "Navigation interactive et listage des dossiers distants (CWD, CDUP, PWD, LIST, NLST)",
+      "Exploration récursive de l'arborescence via les algorithmes DFS et BFS",
+      "Exportation de la structure des fichiers au format JSON via Gson (Pattern Composite)",
+      "Mécanisme de résilience avec reconnexion automatique après perte de connexion réseau",
+      "Architecture modulaire utilisant les design patterns Façade et Composite"
+    ],
+    date: "2026-01",
+    status: "completed",
+  },
+  {
+    id: 9,
+    title: "FlopBox",
+    slug: "flopbox",
+    description: "Proxy REST pour serveurs FTP avec sécurité JWT, permettant de piloter des serveurs distants via une API HTTP.",
+    longDescription: `
+      FlopBox est un proxy REST développé en Java 21 et Spring Boot 3.4.3. Il permet à un client HTTP de piloter des serveurs FTP distants (liste, création, renommage, suppression, téléchargement) sans implémenter le protocole FTP. 
+      Le projet intègre une authentification stateless sécurisée par JWT, une base de données H2 en mémoire pour l'enregistrement des alias de serveurs, et utilise les design patterns Façade, Adaptateur et DTO pour une architecture logicielle découplée et robuste.
+    `,
+    image: withBasePath("/images/flopbox_avatar.png"),
+    images: [
+      withBasePath("/images/flopbox_avatar.png")
+    ],
+    tags: ["Java 21", "Spring Boot", "REST API", "JWT", "FTP"],
+    technologies: {
+      frontend: ["Client HTTP", "Swagger UI"],
+      backend: ["Java 21", "Spring Boot 3.4.3", "Spring Security", "Apache Commons Net", "H2 Database", "JJWT"],
+      tools: ["Maven", "Git", "UML"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/flopbox",
+      demo: "https://github.com/Logibuilder/flopbox/blob/main/src/flopbox-demo.mkv",
+      documentation: null,
+    },
+    features: [
+      "Exposition d'une API REST complète pour piloter des serveurs FTP distants",
+      "Authentification stateless avec JWT (Access tokens de 15 min & Refresh tokens de 7 jours)",
+      "Recherche récursive globale et tolérante aux pannes sur multi-serveurs avec garde-fous",
+      "Téléchargement et téléversement de fichiers en streaming avec fermeture propre des sockets FTP",
+      "Base de données H2 en mémoire pour la gestion centralisée des serveurs",
+      "Traduction dynamique des codes de réponse FTP en codes HTTP via un Adaptateur"
+    ],
+    date: "2026-03",
+    status: "completed",
+  },
+  {
+    id: 11,
+    title: "FlopBox Agent",
+    slug: "flopbox-agent",
+    description: "Agent de synchronisation multi-serveurs automatique et console interactive pour la gestion de la corbeille distante.",
+    longDescription: `
+      Application cliente Java en console conçue pour synchroniser automatiquement des serveurs FTP distants via la plateforme FlopBox. 
+      Elle relève le défi technique de l'exécution multi-threadée, séparant une boucle de synchronisation bidirectionnelle en tâche de fond (toutes les 60 secondes) d'une console interactive s'exécutant sur le thread principal. 
+      L'agent intègre une détection intelligente des renommages locaux basés sur des heuristiques de taille et de date pour optimiser les transferts réseau. Une gestion rigoureuse de l'alignement des horloges (timestamps) entre le FTP et le système d'exploitation local évite les faux positifs de synchronisation. 
+      Enfin, une technique de 'fichier fantôme' (ghost file) est implémentée lors de la restauration de fichiers depuis la corbeille pour garantir la cohérence des états locaux et distants lors du cycle suivant.
+    `,
+    image: withBasePath("/images/flopbox_agent_avatar.jpg"), // Image à générer ultérieurement
+    images: [
+      withBasePath("/images/flopbox_agent_avatar.jpg")
+    ],
+    tags: ["Java", "Multi-threading", "Maven", ],
+    technologies: {
+      frontend: ["Console interactive"],
+      backend: ["Java21", "HttpClient Asynchrone", "Records", "ScheduledExecutorService", "Jackson Databind"],
+      tools: ["Maven", "Git", "JUnit 5", "Mockito", "Logback"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/flopbox-agent", 
+      demo: null,
+      documentation: null,
+    },
+    features: [
+      "Authentification sécurisée JWT (stateless)",
+      "Synchronisation bidirectionnelle multi-serveurs automatique et planifiée (background thread)",
+      "Console interactive de gestion de la corbeille distante (.deleted)",
+      "Détection heuristique intelligente des renommages locaux pour optimiser la bande passante",
+      "Optimisation des performances via E/S Asynchrones non bloquantes (sendAsync)",
+      "Alignement précis des timestamps FTP/OS pour éviter les cycles de synchro inutiles",
+      "Algorithme de cohérence par 'fichier fantôme' lors de la restauration distante"
+    ],
+    date: "2026-04", 
+    status: "completed",
+  },
+  {
+    id: 12,
+    title: "Audio File Player",
+    slug: "audio-file-player",
+    description: "Lecteur audio performant et extensible en ligne de commande (CLI) avec pipeline de traitement modulaire.",
+    longDescription: `
+      Ce projet est un lecteur audio simple en ligne de commande écrit en Rust. Il met en œuvre un pipeline de traitement audio modulaire permettant le décodage, la gestion d'état et la lecture en temps réel sur le matériel système. L'architecture exploite les concepts avancés de concurrence de Rust, tels que les canaux de communication non bloquants (\`mpsc\`) et le partage d'état sécurisé via \`Arc<Mutex<T>>\`. La conception repose sur des Traits pour abstraire la sortie audio, rendant l'application facilement extensible à d'autres backends.
+    `,
+    image: withBasePath("/images/audio_file_player_avatar.png"), 
+    images: [
+      withBasePath("/images/audio_file_player_avatar.png")
+    ],
+    tags: ["Rust", "CLI", "Audio", "Multi-threading", "CPAL"],
+    technologies: {
+      frontend: ["Console CLI", "Crossterm"],
+      backend: ["Rust", "Symphonia", "CPAL", "mpsc"],
+      tools: ["Cargo", "Git"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/audio-file-player",
+      demo: null,
+      documentation: null,
+    },
+    features: [
+      "Interface utilisateur interactive en ligne de commande (CLI) pour piloter la lecture, mettre en pause, stopper et régler le volume",
+      "Décodage audio optimisé par morceaux (chunks) via la bibliothèque Symphonia (supportant MP3, WAV, FLAC, ISOMP4)",
+      "Sortie audio bas niveau gérée de manière asynchrone par la bibliothèque CPAL",
+      "Architecture concurrente thread-safe séparant l'interface utilisateur, la gestion d'état (Pipeline) et le moteur audio",
+      "Abstraction logicielle de la sortie audio utilisant le système de Traits de Rust",
+      "Suite complète de tests unitaires et d'intégration validant le pipeline, les commandes et le décodage"
+    ],
+    date: "2026-05", 
+    status: "completed",
+  },
+  {
+    id: 13,
+    title: "100 Exercises Rust",
+    slug: "100-exercises-to-learn-rust",
+    description: "Formation pratique et interactive pour maîtriser les concepts fondamentaux et avancés du langage Rust.",
+    longDescription: `
+      Ce projet retrace mon parcours à travers le cours "100 Exercises To Learn Rust" développé par Mainmatter et écrit par Luca Palmieri. 
+      Basée sur la méthodologie de "l'apprentissage par la pratique", cette formation couvre l'intégralité du langage Rust de manière progressive. Elle aborde la syntaxe de base, le système de types, les structures, les énumérations, et plonge dans les concepts plus complexes comme la gestion de la mémoire (Stack/Heap, Ownership, Lifetimes), le multi-threading (Channels, Mutex) et la programmation asynchrone (Futures).
+    `,
+    image: withBasePath("/images/100_exercices_to_learn_rust_avatar.png"), // Image à générer ultérieurement
+    images: [
+      withBasePath("/images/100_exercices_to_learn_rust_avatar.png")
+    ],
+    tags: ["Rust", "Formation", "Algo"],
+    technologies: {
+      frontend: [],
+      backend: ["Rust"],
+      tools: ["Git", "wr (Workshop Runner CLI)", "Cargo"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/100_execices_to_learn_rust", 
+      demo: null,
+      documentation : "https://academy.jetbrains.com/course/16631",
+    },
+    features: [
+      "Résolution d'une centaine d'exercices pratiques couvrant la bibliothèque standard et l'écosystème Rust",
+      "Validation continue et automatisée des exercices via l'outil en ligne de commande 'wr'",
+      "Manipulation avancée de la mémoire : Ownership, Lifetimes, pointeurs intelligents (Box, Rc, Arc)",
+      "Implémentation du multi-threading : Scoped threads, Channels (synchrones et asynchrones), RwLock",
+      "Pratique de la programmation asynchrone (Async/Await, Futures) et des traits spécifiques de Rust",
+      "Gestion rigoureuse des erreurs via le pattern matching, Result, et la crate 'thiserror'"
+    ],
+    date: "2026-05", 
+    status: "completed",
+  },
+  {
+    id: 14,
+    title: "Pokémon Battle Simulator",
+    slug: "pokemon-battle",
+    description: "Simulateur de combats Pokémon en équipe automatisé en console, illustrant les concepts avancés de la POO en C++.",
+    longDescription: `
+      Ce projet est une application console simulant un tournoi automatisé entre deux dresseurs. Chaque joueur reçoit une équipe générée aléatoirement et s'affronte dans un combat au tour par tour. 
+      Le moteur de jeu intègre les statistiques (PV, Attaque, Défense, Vitesse), le hasard et un système d'affinités de types (Eau, Feu, Plante). L'architecture du code met en pratique les concepts fondamentaux de la Programmation Orientée Objet en C++ : classes abstraites, héritage, polymorphisme, gestion dynamique de la mémoire avec des pointeurs, et utilisation de la bibliothèque standard (STL).
+    `,
+    // Remplacement du lien blob par le lien raw, et retrait de withBasePath
+    image: "https://raw.githubusercontent.com/Logibuilder/pokemon-battle/main/pokemon-battle.png", 
+    images: [
+      "https://raw.githubusercontent.com/Logibuilder/pokemon-battle/main/pokemon-battle.png"
+    ],
+    tags: ["C++", "POO", "STL", "Jeu"],
+    technologies: {
+      frontend: ["Console CLI"],
+      backend: ["C++", "STL (Standard Template Library)", "API Windows (<windows.h>)"],
+      tools: ["G++ (MinGW)", "Git"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/pokemon-battle",
+      demo: null,
+      documentation: null,
+    },
+    features: [
+      "Système de types (Pierre-Feuille-Ciseaux) avec gestion des avantages et faiblesses",
+      "Combat d'équipe automatisé avec remplacement dynamique des Pokémon K.O.",
+      "Architecture POO exploitant le polymorphisme, l'héritage et les classes abstraites",
+      "Attaques spécifiques par type gérées via des collections de la STL (std::map, std::list)",
+      "Interface console rythmée en temps réel via temporisation de l'API Windows"
+    ],
+    date: "2024-01", 
+    status: "completed",
+  },
+  {
+    id: 15,
+    title: "Tisseo Android",
+    slug: "tisseo-android",
+    description: "Application Android moderne pour consulter les horaires en temps réel du réseau de transport Tisséo (Toulouse Métropole).",
+    longDescription: `
+      Application mobile développée en Kotlin dans le cadre du Master 1 Informatique de l'Université de Lille. 
+      Elle repose sur les principes de Clean Architecture et du pattern MVVM pour garantir un code modulaire et maintenable. L'application permet de rechercher des arrêts, de consulter les lignes et les horaires en temps réel, de gérer des favoris accessibles hors connexion (grâce à Room), et de visualiser le tracé des lignes sur une carte interactive.
+    `,
+    image: withBasePath("/images/app_tisseo_avatar.png"), 
+    images: [
+      withBasePath("/images/app_tisseo_avatar.png")
+    ],
+    tags: ["Android", "Kotlin", "MVVM", "Jetpack Compose", "Clean Architecture"],
+    technologies: {
+      frontend: ["Jetpack Compose", "Material 3", "Navigation Compose"],
+      backend: ["Kotlin 2.0.21", "Coroutines & Flow", "Retrofit", "Moshi", "Room (SQLite)"],
+      tools: ["OSMDroid (OpenStreetMap)", "Git"],
+    },
+    links: {
+      github: "https://github.com/Logibuilder/Tisseo", 
+      demo: null,
+      documentation: null,
+    },
+    features: [
+      "Recherche d'arrêts avec autocomplétion (minimum 3 caractères)",
+      "Affichage des horaires, des alertes et des informations trafic en temps réel",
+      "Sauvegarde des arrêts favoris avec disponibilité hors connexion et export au format JSON",
+      "Visualisation cartographique des lignes de transport via OpenStreetMap (OSMDroid)",
+      "Architecture robuste (Clean Architecture, MVVM) avec gestion centralisée des erreurs"
+    ],
+    date: "2025-12", 
+    status: "completed",
+  }
+];
+=== ./src/data/skills.tsx ===
+// ==========================================
+// 7. src/data/skills.ts
+// ==========================================
+import { SkillCategory } from '@/types';
+import { 
+  FaJava, FaReact, FaNodeJs, FaGitAlt, FaPython 
+} from 'react-icons/fa';
+import { 
+  SiSpringboot, SiPostgresql, SiJavascript, SiTypescript, 
+  SiNextdotjs, SiBootstrap, SiTailwindcss, SiFastapi, 
+  SiMongodb, SiDocker, SiSvelte, SiFramer, SiSocketdotio, SiShadcnui,
+  SiRust, SiCplusplus, SiKotlin, SiAndroid, SiC
+} from 'react-icons/si';
+
+export const skillCategories: SkillCategory[] = [
+  {
+    title: "Backend & Architecture",                       
+    skills: [
+      { 
+        name: "Java 21", 
+        icon: <FaJava />, 
+        color: "#e76f00",
+        level: 5,
+      },
+      { 
+        name: "Kotlin", 
+        icon: <SiKotlin />, 
+        color: "#7F52FF",
+        level: 3,
+      },
+      { 
+        name: "C++", 
+        icon: <SiCplusplus />, 
+        color: "#00599C",
+        level: 3,
+      },
+      { 
+        name: "C", 
+        icon: <SiC />, 
+        color: "#00599C",
+        level: 3,
+      },
+      { 
+        name: "Rust", 
+        icon: <SiRust />, 
+        color: "#dea584",
+        level: 2,
+      },
+      { 
+        name: "Spring Boot", 
+        icon: <SiSpringboot />, 
+        color: "#6db33f",
+        level: 4,
+      },
+      { 
+        name: "Python", 
+        icon: <FaPython />, 
+        color: "#3776ab",
+        level: 4,
+      },
+      { 
+        name: "FastAPI", 
+        icon: <SiFastapi />, 
+        color: "#009688",
+        level: 4,
+      },
+      { 
+        name: "Node.js", 
+        icon: <FaNodeJs />, 
+        color: "#68a063",
+        level: 3,
+      },
+      { 
+        name: "PostgreSQL", 
+        icon: <SiPostgresql />, 
+        color: "#336791",
+        level: 4,
+      },
+      { 
+        name: "MongoDB", 
+        icon: <SiMongodb />, 
+        color: "#47A248",
+        level: 3,
+      },
+      { 
+        name: "Docker", 
+        icon: <SiDocker />, 
+        color: "#2496ED",
+        level: 3,
+      },
+    ]
+  },
+  {
+    title: "Frontend Moderne",
+    skills: [
+      { 
+        name: "Android", 
+        icon: <SiAndroid />, 
+        color: "#3DDC84",
+        level: 3,
+      },
+      { 
+        name: "React.js", 
+        icon: <FaReact />, 
+        color: "#61dafb",
+        level: 4,
+      },
+      { 
+        name: "Next.js", 
+        icon: <SiNextdotjs />, 
+        color: "#000000",
+        level: 4,
+      },
+      { 
+        name: "TypeScript", 
+        icon: <SiTypescript />, 
+        color: "#3178c6",
+        level: 4,
+      },
+      { 
+        name: "JavaScript", 
+        icon: <SiJavascript />, 
+        color: "#f7df1e",
+        level: 5,
+      },
+      { 
+        name: "Svelte", 
+        icon: <SiSvelte />, 
+        color: "#FF3E00",
+        level: 3,
+      },
+    ]
+  },
+  {
+    title: "UI & Outils",
+    skills: [
+      { 
+        name: "Tailwind CSS", 
+        icon: <SiTailwindcss />, 
+        color: "#38bdf8",
+        level: 4,
+      },
+      { 
+        name: "shadcn/ui", 
+        icon: <SiShadcnui />, 
+        color: "#000000",
+        level: 4,
+      },
+      { 
+        name: "Bootstrap", 
+        icon: <SiBootstrap />, 
+        color: "#7952b3",
+        level: 4,
+      },
+      { 
+        name: "Framer Motion", 
+        icon: <SiFramer />, 
+        color: "#0055FF",
+        level: 3,
+      },
+      { 
+        name: "Socket.io", 
+        icon: <SiSocketdotio />, 
+        color: "#010101",
+        level: 3,
+      },
+      { 
+        name: "Git", 
+        icon: <FaGitAlt />, 
+        color: "#f05032",
+        level: 4,
+      },
+    ]
+  }
+];
+=== ./src/hooks/ThemeProvider.tsx ===
+"use client";
+
+import * as React from "react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { ThemeProviderProps } from "next-themes";
+
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+}
+=== ./src/hooks/useIntersectionObserver.ts ===
+
+=== ./src/hooks/useMediaQuery.ts ===
+// ==========================================
+// 8. src/hooks/useMediaQuery.ts
+// ==========================================
+import { useState, useEffect } from 'react';
+
+export function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    
+    // Set initial value
+    setMatches(media.matches);
+
+    // Create listener
+    const listener = (e: MediaQueryListEvent) => setMatches(e.matches);
+    
+    // Add listener
+    media.addEventListener('change', listener);
+
+    // Cleanup
+    return () => media.removeEventListener('change', listener);
+  }, [query]);
+
+  return matches;
+}
+
+// Helpers pré-configurés
+export const useIsMobile = () => useMediaQuery('(max-width: 768px)');
+export const useIsTablet = () => useMediaQuery('(max-width: 1024px)');
+export const useIsDesktop = () => useMediaQuery('(min-width: 1024px)');
+=== ./src/hooks/useScrollAnimation.ts ===
+// ==========================================
+// 9. src/hooks/useScrollAnimation.ts
+// ==========================================
+import { useEffect, useRef, useState } from 'react';
+
+interface UseScrollAnimationOptions {
+  threshold?: number;
+  rootMargin?: string;
+  triggerOnce?: boolean;
+}
+
+export function useScrollAnimation(options: UseScrollAnimationOptions = {}) {
+  const { threshold = 0.1, rootMargin = '0px', triggerOnce = true } = options;
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (triggerOnce && ref.current) {
+            observer.unobserve(ref.current);
+          }
+        } else if (!triggerOnce) {
+          setIsVisible(false);
+        }
+      },
+      { threshold, rootMargin }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [threshold, rootMargin, triggerOnce]);
+
+  return { ref, isVisible };
+}
+=== ./src/hooks/useTheme.ts ===
+
+=== ./src/lib/animations.ts ===
+
+=== ./src/lib/api.ts ===
+
+=== ./src/lib/paths.ts ===
+// src/lib/paths.ts
+
+export const withBasePath = (path: string): string => {
+  // Récupère le basePath défini par Next.js lors du build sur GitHub Actions
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  return `${basePath}${path}`;
+};
+=== ./src/lib/utils.ts ===
+// ==========================================
+// 1. src/lib/utils.ts
+// ==========================================
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+/**
+ * Combine les classes CSS avec Tailwind
+ */
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+/**
+ * Formater une date en français
+ */
+export function formatDate(date: string | Date): string {
+  return new Intl.DateTimeFormat('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(new Date(date));
+}
+
+/**
+ * Debounce une fonction
+ */
+export function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
+
+/**
+ * Générer un slug à partir d'un titre
+ */
+export function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+=== ./src/lib/validators.ts ===
+
+=== ./src/styles/animations.css ===
+
+=== ./src/styles/reset.css ===
+
+=== ./src/styles/variables.css ===
+
+=== ./src/types/api.ts ===
+
+=== ./src/types/components.ts ===
+
+=== ./src/types/index.ts ===
+// ==========================================
+// 2. src/types/index.ts
+// ==========================================
+export interface Project {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  longDescription: string;
+  image: string;
+  images?: string[];
+  tags: string[];
+  technologies: {
+    frontend: string[];
+    backend: string[];
+    tools: string[];
+  };
+  links: {
+    github: string | null;
+    demo: string | null;
+    documentation: string | null;
+  };
+  features: string[];
+  date: string;
+  status: 'completed' | 'in-progress' | 'planned';
+}
+
+export interface Skill {
+  name: string;
+  category: 'frontend' | 'backend' | 'tools' | 'other';
+  level: number; // 1-5
+  icon: React.ReactNode;
+  color: string;
+}
+
+export interface SkillCategory {
+  title: string;
+  skills: Omit<Skill, 'category'>[];
+}
+
+export interface Experience {
+  id: number;
+  title: string;
+  company: string;
+  period: string;
+  description: string;
+  technologies: string[];
+}
+
+export interface NavItem {
+  name: string;
+  href: string;
+  icon?: string;
+}
+=== ./tsconfig.json ===
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ] /* <--- C'EST CETTE LIGNE QUI MANQUE SOUVENT */
+    },
+    "strictNullChecks": true
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+

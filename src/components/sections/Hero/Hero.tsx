@@ -75,16 +75,14 @@ export const Hero: React.FC = () => {
             {/* Titre du poste */}
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-4 md:mb-6 leading-tight">
               Développeur <br className="hidden md:block" />
-              Full Stack
+              Logiciel
             </h2>
 
             {/* Description */}
             <p className="text-lg text-muted mb-8 md:mb-10 max-w-md leading-relaxed">
-              Un développeur Full Stack passionné par l'innovation et les technologies modernes, 
-              basé en Région Parisienne.
+              Étudiant en développement Full Stack basé Lille. Passionné par les technologies modernes, je cherche à mettre mon apprentissage et ma curiosité au service d'une entreprise innovante dans le cadre d'une alternance.
             </p>
 
-            {/* Boutons d'action et Réseaux Sociaux */}
             {/* Boutons d'action et Réseaux Sociaux */}
             <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 md:gap-6 w-full sm:w-auto">
               
