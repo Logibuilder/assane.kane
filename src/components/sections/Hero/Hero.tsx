@@ -89,7 +89,7 @@ export const Hero: React.FC = () => {
               {/* Bouton CV (Action Principale) */}
               <Button
                 size="lg"
-                onClick={() => window.open(withBasePath('/Assane_KANE_MON_CV.pdf'), '_blank')}
+                onClick={() => window.open(withBasePath('/cv_assane_kane.pdf'), '_blank')}
                 className="rounded-full bg-primary text-white hover:bg-primary/90 px-8 transition-all w-full sm:w-auto shadow-[0_0_20px_rgba(220,53,69,0.3)] flex items-center justify-center gap-2"
               >
                 <FiDownload size={18} />
